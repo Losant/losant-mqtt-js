@@ -2,18 +2,23 @@
   "name": "structure-sdk-js",
   "version": "0.0.1",
   "description": "The Structure JavaScript SDK",
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/GetStructure/structure-sdk-js"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GetStructure/structure-sdk-js"
   },
   "main": "index.js",
   "author": "Structure <hello@getstructure.io>",
   "license": "MIT",
+  "engines": {
+    "node": "0.12.7"
+  },
   "dependencies": {
     "mongodb-extended-json": "1.5.3",
     "mqtt": "1.4.3"
   },
-  "engines" : {
-    "node" : "0.12.7"
+  "devDependencies": {
+    "cylon": "1.2.0",
+    "cylon-intel-iot": "0.8.0",
+    "cylon-gpio": "0.27.0"
   }
 }
