@@ -12,13 +12,24 @@
   "engines": {
     "node": "0.12.7"
   },
+  "scripts": {
+    "pretest": "jshint *.js lib/*.js test/*.js",
+    "test": "mocha --recursive --reporter spec test 2>&1",
+    "coverage": "rm -rf coverage; istanbul cover _mocha -- --recursive --reporter spec --bail"
+  },
   "dependencies": {
     "mongodb-extended-json": "1.5.3",
     "mqtt": "1.4.3"
   },
   "devDependencies": {
     "cylon": "1.2.0",
+    "cylon-gpio": "0.27.0",
     "cylon-intel-iot": "0.8.0",
-    "cylon-gpio": "0.27.0"
+    "istanbul": "0.4.0",
+    "jshint": "2.8.0",
+    "mocha": "2.3.3",
+    "proxyquire": "1.7.3",
+    "should": "7.1.1",
+    "sinon": "^1.17.2"
   }
 }

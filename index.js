@@ -1,5 +1,3 @@
-var Gateway = require('./lib/gateway');
-
 module.exports = {
-  gateway: Gateway
+  gateway: require('./lib/gateway')
 };
