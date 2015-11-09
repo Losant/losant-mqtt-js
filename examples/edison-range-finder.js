@@ -2,6 +2,9 @@
 // ultrasonic range finder, and sends the value to the structure
 // platform once per second.
 
+// For jshint
+/* global every:false */
+
 var Structure = require('../index');
 var Cylon = require('cylon');
 
@@ -34,8 +37,8 @@ var robot = Cylon.robot({
     // Ready the analog value from the edison and send it to structure.
     // Structure receives state information as an object with attributes
     // and values. In this example, the attribute is named 'value'.
-    every((1).second(), function() { 
-      range.sendState({ value: my.range.analogRead()}) 
+    every((1).second(), function() {
+      range.sendState({ value: my.range.analogRead()});
     });
   }
 });

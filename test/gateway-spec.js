@@ -10,7 +10,7 @@ var gateway = proxyquire('../lib/gateway', { 'mqtt': mqttStub });
 
 describe('Gateway', function() {
   describe('connect', function() {
-    it('should call mqtt.connect with correct parameters', function() {
+    it('should call mqtt.connect with correct parameters when supplying no transport', function() {
       var g = gateway({
         key: 'test-key',
         secret: 'test-secret',
@@ -23,8 +23,92 @@ describe('Gateway', function() {
       g.connect();
 
       stub.calledWith(
-        config.mqttEndpoint,
-        { clientId: 'test-gateway-id', username: 'test-key', password: 'test-secret'}
+        'mqtts://' + config.mqttEndpoint,
+        { clientId: 'test-gateway-id', username: 'test-key', password: 'test-secret', port: 8883}
+      ).should.equal(true);
+
+      stub.restore();
+    });
+
+    it('should call mqtt.connect with correct parameters when supplying tcp transport', function() {
+      var g = gateway({
+        key: 'test-key',
+        secret: 'test-secret',
+        gatewayId: 'test-gateway-id',
+        transport: 'tcp'
+      });
+
+      var stub = sinon.stub(mqttStub, 'connect');
+      stub.returns({ on: function() { }});
+
+      g.connect();
+
+      stub.calledWith(
+        'mqtt://' + config.mqttEndpoint,
+        { clientId: 'test-gateway-id', username: 'test-key', password: 'test-secret', port: 1883}
+      ).should.equal(true);
+
+      stub.restore();
+    });
+
+    it('should call mqtt.connect with correct parameters when supplying ws transport', function() {
+      var g = gateway({
+        key: 'test-key',
+        secret: 'test-secret',
+        gatewayId: 'test-gateway-id',
+        transport: 'ws'
+      });
+
+      var stub = sinon.stub(mqttStub, 'connect');
+      stub.returns({ on: function() { }});
+
+      g.connect();
+
+      stub.calledWith(
+        'ws://' + config.mqttEndpoint,
+        { clientId: 'test-gateway-id', username: 'test-key', password: 'test-secret', port: 80}
+      ).should.equal(true);
+
+      stub.restore();
+    });
+
+    it('should call mqtt.connect with correct parameters when supplying wss transport', function() {
+      var g = gateway({
+        key: 'test-key',
+        secret: 'test-secret',
+        gatewayId: 'test-gateway-id',
+        transport: 'wss'
+      });
+
+      var stub = sinon.stub(mqttStub, 'connect');
+      stub.returns({ on: function() { }});
+
+      g.connect();
+
+      stub.calledWith(
+        'wss://' + config.mqttEndpoint,
+        { clientId: 'test-gateway-id', username: 'test-key', password: 'test-secret', port: 443}
+      ).should.equal(true);
+
+      stub.restore();
+    });
+
+    it('should call mqtt.connect with correct parameters when supplying tls transport', function() {
+      var g = gateway({
+        key: 'test-key',
+        secret: 'test-secret',
+        gatewayId: 'test-gateway-id',
+        transport: 'tls'
+      });
+
+      var stub = sinon.stub(mqttStub, 'connect');
+      stub.returns({ on: function() { }});
+
+      g.connect();
+
+      stub.calledWith(
+        'mqtts://' + config.mqttEndpoint,
+        { clientId: 'test-gateway-id', username: 'test-key', password: 'test-secret', port: 8883}
       ).should.equal(true);
 
       stub.restore();
