@@ -1,7 +1,7 @@
 Structure JavaScript SDK
 ============
 
-The Structure SDKs provide a simply way for your custom devices to communicate with the Structure platform. The Structure JavaScript SDK is a wrapper and abstraction layer around the Node.js [MQTT client](https://github.com/mqttjs/MQTT.js). Please see the full [Structure documentation](http://getstructure.io/docs) for more details.
+The Structure SDKs provide a simple way for your custom devices to communicate with the Structure platform. The Structure JavaScript SDK is a wrapper and abstraction layer around the Node.js [MQTT client](https://github.com/mqttjs/MQTT.js). Please see the full [Structure documentation](http://getstructure.io/docs) for more details.
 
 ## Installation
 The Structure JavaScript SDK is installed using npm.
