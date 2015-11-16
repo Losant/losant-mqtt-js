@@ -18,6 +18,7 @@
     "coverage": "rm -rf coverage; istanbul cover _mocha -- --recursive --reporter spec --bail"
   },
   "dependencies": {
+    "debug": "2.2.0",
     "mongodb-extended-json": "1.5.3",
     "mqtt": "1.4.3"
   },
