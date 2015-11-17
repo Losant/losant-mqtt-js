@@ -1,30 +1,63 @@
 Structure JavaScript SDK
 ============
 
-The Structure SDKs provide a simple way for your custom devices to communicate with the Structure platform. The Structure JavaScript SDK is a wrapper and abstraction layer around the Node.js [MQTT client](https://github.com/mqttjs/MQTT.js). Please see the full [Structure documentation](http://getstructure.io/docs) for more details.
+The Structure SDKs provide a simple way for custom things to communicate with the Structure platform. The Structure JavaScript SDK uses the Node.js [MQTT client](https://github.com/mqttjs/MQTT.js) for all underlying communication.
 
 ## Installation
 The Structure JavaScript SDK is installed using npm.
 
-```text
+```
 $ npm install structure-sdk-js
 ```
 
+## Example
+
+Below is a high-level example of using the Structure JavaScript SDK to send the value of a temperature sensor to Structure platform.
+
+```javascript
+var Structure = require('structure-sdk-js');
+
+// Construct gateway.
+var gateway = Structure.gateway({
+  key: 'my-app-access-key',
+  secret: 'my-app-access-secret',
+  gatewayId: 'my-gateway-id'
+});
+
+// Attach sensors.
+var temperatureDevice = gateway.attachDevice('my-device-id');
+
+// Connect to Structure.
+gateway.connect();
+
+// Send temperature once every second.
+setInterval(function() {
+  temperatureDevice.sendState({ temperature: readAnalogIn() });
+}, 1000);
+```
+
+
 ## API Documentation
-* [`Structure.gateway()`](#gateway)
-* [`Structure.gateway#devices`](#gateway-devices)
-* [`Structure.gateway#connect()`](#gateway-connect)
-* [`Structure.gateway#receiveState()`](#gateway-receivestate)
-* [`Structure.gateway#sendStateChangeRequest()`](#gateway-sendstatechangerequest)
-* [`Structure.gateway#sendMessage()`](#gateway-sendmessage)
-* [`Structure.device()`](#device)
-* [`Structure.device#sendState()`](#device-sendstate)
-* [`Structure.device#receiveStateChangeRequest()`](#device-receivestatechangerequest)
-* [`Structure.device#receiveMessage()`](#device-receivemessage)
+* [`Gateway`](#gateway)
+  * [`gateway.attachDevice()`](#gateway-attachdevice)
+  * [`gateway.getDevice()`](#gateway-getdevice)
+  * [`gateway.connect()`](#gateway-connect)
+  * [`gateway.receiveState()`](#gateway-receivestate)
+  * [`gateway.sendStateChangeRequest()`](#gateway-sendstatechangerequest)
+  * [`gateway.sendMessage()`](#gateway-sendmessage)
+  * [`Event: 'connect'`](#gateway-eventconnect)
+  * [`Event: 'reconnect'`](#gateway-eventreconnect)
+  * [`Event: 'close'`](#gateway-eventclose)
+  * [`Event: 'offline'`](#gateway-eventoffline)
+  * [`Event: 'error'`](#gateway-eventerror)
+* [`Device`](#device)
+  * [`device.sendState()`](#device-sendstate)
+  * [`device.receiveStateChangeRequest()`](#device-receivestatechangerequest)
+  * [`device.receiveMessage()`](#device-receivemessage)
 
 ## Gateway
 
-In Structure, a gateway is the thing that is communicating directly with the Structure platform. Typically the code that is using this SDK is running on a Gateway, for example a Raspberry PI or Intel Edison.
+In Structure, a gateway is the thing that is communicating with the Structure platform. Typically code using this SDK is running on a gateway, e.g. Raspberry PI, Intel Edison, etc.
 
 <a name="gateway"></a>
 ### Structure.gateway(options)
@@ -42,42 +75,56 @@ var gateway = Structure.gateway({
   key: 'my-app-access-key',
   secret: 'my-app-access-secret',
   gatewayId: 'my-gateway-id',
-  deviceIds: [ 'my-device-id-A', 'my-device-id-B' ],
   transport: 'tls'
+});
+
+gateway.connect();
+
+gateway.on('connect', function() {
+
 });
 ```
 
 * `key`: The application-specific access key. These are created and managed using the Structure dashboard.
 * `secret`: The application-specific access secret. These are created and managed using the Structure dashboard.
-* `gatewayId`: The id of this gateway. In order to obtain a Gateway id, it must first be registered with the Structure platform.
-* `deviceIds`: (optional) The array of device ids that are attached to this gateway. In order to obtain device ids they must first be registered with the Structure platform.
+* `gatewayId`: The id of this gateway. In order to obtain a gateway id, it must first be registered with the Structure platform.
 * `transport`: (optional, defaults to `tls`) The communication transport to use. The valid options are:
   * `tls`: Encrypted tcp communication over port 8883.
   * `tcp` Unencrypted tcp communication over port 1883.
   * `wss` Encrypted WebSocket communication over port 443.
   * `ws` Unencrypted WebSocket communication over port 80.
 
-<a name="gateway-devices"></a>
-### gateway.devices
-  Collection of [device](#device) objects attached to the gateway. When a gateway is constructed it will automatically construct the required device objects based on the `deviceIds` parameter. Typically developers will not construct device objects directly.
+<a name="gateway-attachdevice"></a>
+### gateway.attachDevice(deviceId)
+
+Attaches a [device](#device) to this gateway and returns the device object. Typically developers will not construct device objects directly, but will instead use this function. In Structure, devices are typically sensors or other instruments connected to a gateway. For example, the gateway might be a Raspberry PI and a device you attach might be a temperature sensor. `attachDevice` can be called at any time after the gateway is constructed, allowing devices to be dynamically attached and detached at runtime.
 
 ```javascript
-  var myDeviceA = gateway.devices['my-device-id-A'];
-  var myDeviceB = gateway.devices['my-device-id-B'];
+  var myDeviceA = gateway.attachDevice('my-device-id-A');
+  var myDeviceB = gateway.attachDevice('my-device-id-B');
 ```
+
+* `deviceId`: The id of the device to attach. If the same id is attached multiple times, the same device object will be returned.
+
+<a name="gateway-getdevice"></a>
+### gateway.getDevice(deviceId)
+
+Gets a device that has already been [attached](#gateway-attachdevice) to the gateway. If the device id has not yet been attached, undefined will be returned.
+
+```javascript
+var myDeviceA = gateway.getDevice('my-device-id-A');
+```
+
+* `deviceId`: The id of the device to get.
 
 <a name="gateway-connect"></a>
-### gateway.connect(callback)
+### gateway.connect()
 
-Connects the gateway to the Structure platform.
+Connects the gateway to the Structure platform. The gateway will retry failed connections. Hook the `connect` event to know when a connection has been successfully established.
 
 ```javascript
-gateway.connect(function(err) {
-
-});
+gateway.connect();
 ```
-
-* `callback`: Invoked when the connection is complete or it failed. The `err` parameter will includes details of the error.
 
 <a name="gateway-receivestate"></a>
 ### gateway.receiveState(deviceId, callback)
@@ -125,10 +172,57 @@ gateway.sendMessage('my-remote-device-id', 'Random text', function(err) {
 * `message`: The message to send. The message type must be a string and it can contain any arbitrary text.
 * `callback`: Invoked when complete. The `err` parameter will contain any errors that occurred.
 
+<a name="gateway-eventconnect"></a>
+### Event: 'connect'
+
+```javascript
+function() { }
+```
+
+Emitted by the underlying MQTT client on a successful connection or reconnection.
+
+<a name="gateway-eventreconnect"></a>
+### Event: 'reconnect'
+
+```javascript
+function() { }
+```
+
+Emitted by the underlying MQTT client whenever a reconnect starts.
+
+<a name="gateway-eventclose"></a>
+### Event: 'close'
+
+```javascript
+function() { }
+```
+
+Emitted by the underlying MQTT client after a disconnection.
+
+<a name="gateway-eventoffline"></a>
+### Event: 'offline'
+
+```javascript
+function() { }
+```
+
+Emitted by the underlying MQTT client when it goes offline.
+
+<a name="gateway-eventerror"></a>
+### Event: 'error'
+
+```javascript
+function(err) { }
+```
+
+Emitted by the underlying MQTT client when it cannot connect.
+
+* `err`: The error that occurred.
+
 <a name="device"></a>
 ## Devices
 
-In Structure, devices are typically sensors or other instruments connected to a gateway. For example a gateway could be a Raspberry PI and a device could be a temperature sensor attached to some of the Raspberry PI's GPIO pins. Code that uses this SDK is typically run on a gateway and it's usually up to the gateway to know how to read a devices state. The Structure SDK will automatically create device objects when the gateway is constructed. They are available on the `gateway.devices` property. Typically developers will not directly construct device objects.
+In Structure, devices are typically sensors or other instruments connected to a gateway. For example a gateway could be a Raspberry PI and a device could be a temperature sensor attached to some of the Raspberry PI's GPIO pins. Code that uses this SDK is typically run on a gateway and it's usually up to the gateway to know how to read a devices state. Device objects are constructed by calling [`gateway.attachDevice`](#gateway-attachdevice). Typically developers will not construct these directly.
 
 <a name="device-sendstate"></a>
 ### device.sendState(state, callback)
@@ -175,3 +269,15 @@ device.receiveMessage(function(msg) {
 ```
 
 * `callback`: Invoked when a message is received for this device. The `msg` parameter will be a string. It is up to the developer to properly decode the message as needed.
+
+##License
+
+The MIT License (MIT)
+
+Copyright (c) 2015 Structure
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

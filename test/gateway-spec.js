@@ -1,4 +1,4 @@
-require('should');
+var should      = require('should');
 var proxyquire  = require('proxyquire');
 var sinon       = require('sinon');
 var config      = require('../lib/config');
@@ -113,16 +113,36 @@ describe('Gateway', function() {
 
       stub.restore();
     });
+  });
 
-    it('should create devices for each device id', function() {
-      var g = gateway({
-        deviceIds: ['device-id-1', 'device-id-2']
-      });
+  describe('attachDevice', function() {
+    it('should return device object', function() {
+      var g = gateway({});
+      var d = g.attachDevice('my-id');
+      d.id.should.equal('my-id');
+    });
 
-      g.connect();
+    it('should return existing device if duplicate attach', function() {
+      var g = gateway({});
+      var d1 = g.attachDevice('my-id');
+      var d2 = g.attachDevice('my-id');
+      d1.should.equal(d2);
+    });
+  });
 
-      g.devices['device-id-1'].id.should.equal('device-id-1');
-      g.devices['device-id-2'].id.should.equal('device-id-2');
+  describe('getDevice', function() {
+    it('should return device after attached', function() {
+      var g = gateway({});
+      var d1 = g.attachDevice('my-id');
+      var d2 = g.getDevice('my-id');
+      d1.should.equal(d2);
+    });
+
+    it('should return undefined if id does not exist', function() {
+      var g = gateway({});
+      g.attachDevice('my-id');
+      var d2 = g.getDevice('not-an-id');
+      should.not.exist(d2);
     });
   });
 
