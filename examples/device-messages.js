@@ -7,8 +7,8 @@ var Structure = require('../index');
 
 // Gateway A.
 var gatewayA = Structure.gateway({
-  key: 'my-project-key',
-  secret: 'my-project-secret',
+  key: 'my-application-key',
+  secret: 'my-application-secret',
   gatewayId: 'gateway-id-a',
   deviceIds: [ 'device-id-a' ],
   transport: 'tls'
@@ -16,8 +16,8 @@ var gatewayA = Structure.gateway({
 
 // Gateway B.
 var gatewayB = Structure.gateway({
-  key: 'my-project-key',
-  secret: 'my-project-secret',
+  key: 'my-application-key',
+  secret: 'my-application-secret',
   gatewayId: 'gate-id-b',
   deviceIds: [ 'device-id-b' ],
   transport: 'tls'
