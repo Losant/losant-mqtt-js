@@ -160,7 +160,7 @@ gateway.sendStateChangeRequest('my-remote-device-id', { voltage: 3.2 }, function
 <a name="gateway-sendmessage"></a>
 ### gateway.sendMessage(deviceId, message, callback)
 
-Sends a message for a remove device. The message type must be a string and it can contain any arbitrary information. The message will be received by a remote gateway that has the specified deviceId attached and `device.receiveMessage` subscribed.
+Sends a message for a remote device. The message type must be a string and it can contain any arbitrary information. The message will be received by a remote gateway that has the specified deviceId attached and `device.receiveMessage` subscribed.
 
 ```javascript
 gateway.sendMessage('my-remote-device-id', 'Random text', function(err) {
