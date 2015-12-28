@@ -1,55 +1,44 @@
-// This examples uses two gateways and devices to demonstrate
-// sending messages between gateways. Typically these gateways would
-// run on two separate physical things, like Intel Edisons or Raspberry PIs.
+// This examples uses two devices and demonstrates how to send arbitrary
+// messages between them.
 
 var async = require('async');
-var Structure = require('../index');
+var Device = require('../index').Device;
 
-// Gateway A.
-var gatewayA = Structure.gateway({
-  key: 'my-application-key',
-  secret: 'my-application-secret',
-  gatewayId: 'gateway-id-a',
-  deviceIds: [ 'device-id-a' ],
-  transport: 'tls'
+var deviceA = new Device({
+  id: 'device-id-a',
+  key: 'application-key',
+  secret: 'application-secret',
 });
 
-// Gateway B.
-var gatewayB = Structure.gateway({
-  key: 'my-application-key',
-  secret: 'my-application-secret',
-  gatewayId: 'gate-id-b',
-  deviceIds: [ 'device-id-b' ],
-  transport: 'tls'
+var deviceB = new Device({
+  id: 'device-id-b',
+  key: 'application-key',
+  secret: 'application-secret',
+});
+
+deviceA.connect();
+deviceB.connect();
+
+// Receive messages sent to device a.
+deviceA.receiveMessage(function(msg) {
+  console.log(msg);
+});
+
+// Receive messages sent to device b.
+deviceB.receiveMessage(function(msg) {
+  console.log(msg);
 });
 
 // Send messages to each other.
 var sendMessages = function() {
 
-  // Receieve messages sent to device ID "device-id-a".
-  gatewayA.devices['device-id-a'].receiveMessage(function(msg) {
-    console.log(msg);
-  });
+  // Send a message to device B from device A.
+  deviceA.sendMessage('device-id-b', 'Hello B, from Device A.');
 
-  // Receive messages sent to device id "device-id-b".
-  gatewayB.devices['device-id-b'].receiveMessage(function(msg) {
-    console.log(msg);
-  });
-
-  // Send a message to device B from gateway A. Device B is not attached
-  // to gateway A, so this message will go through the cloud platform.
-  gatewayA.sendMessage('device-id-b', 'Hello B, from gateway A.');
-
-  // Send a message to device A from gateway B.
-  gatewayB.sendMessage('device-id-a', 'Hello A, from gateway B.');
+  // Send a message to device A from device B.
+  deviceB.sendMessage('device-id-a', 'Hello A, from Device B.');
 };
 
-// Connect the two gateways to Structure.
-async.series([ gatewayA.connect, gatewayB.connect ], function(err) {
-  if(err) {
-    console.log(err);
-    process.exit(1);
-  }
-
+setInterval(function() {
   sendMessages();
-});
+}, 2000);

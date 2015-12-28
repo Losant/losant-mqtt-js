@@ -1,3 +1,3 @@
 module.exports = {
-  gateway: require('./lib/gateway')
+  Device: require('./lib/device')
 };
