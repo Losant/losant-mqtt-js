@@ -1,7 +1,5 @@
 // This examples uses two devices and demonstrates how to send arbitrary
 // messages between them.
-
-var async = require('async');
 var Device = require('../index').Device;
 
 var deviceA = new Device({
