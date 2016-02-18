@@ -15,107 +15,39 @@ $ npm install structure-sdk-js
 Below is a high-level example of using the Structure JavaScript SDK to send the value of a temperature sensor to Structure platform.
 
 ```javascript
-var Structure = require('structure-sdk-js');
+var Device = require('structure-sdk-js').Device;
 
 // Construct gateway.
-var gateway = Structure.gateway({
+var device = new Device({
+  id: 'my-device-id',
   key: 'my-app-access-key',
-  secret: 'my-app-access-secret',
-  gatewayId: 'my-gateway-id'
+  secret: 'my-app-access-secret'
 });
 
-// Attach sensors.
-var temperatureDevice = gateway.attachDevice('my-device-id');
-
 // Connect to Structure.
-gateway.connect();
+device.connect();
 
 // Send temperature once every second.
 setInterval(function() {
-  temperatureDevice.sendState({ temperature: readAnalogIn() });
+  device.sendState({ temperature: readAnalogIn() });
 }, 1000);
 ```
 
 
 ## API Documentation
-* [`Gateway`](#gateway)
-  * [`gateway.attachDevice()`](#gateway-attachdevice)
-  * [`gateway.getDevice()`](#gateway-getdevice)
-  * [`gateway.connect()`](#gateway-connect)
+* [`Device`](#gateway)
+  * [`device.connect()`](#device-connect)
   * [`gateway.receiveState()`](#gateway-receivestate)
   * [`gateway.sendStateChangeRequest()`](#gateway-sendstatechangerequest)
   * [`gateway.sendMessage()`](#gateway-sendmessage)
+  * [`device.sendState()`](#device-sendstate)
+  * [`device.receiveStateChangeRequest()`](#device-receivestatechangerequest)
+  * [`device.receiveMessage()`](#device-receivemessage)
   * [`Event: 'connect'`](#gateway-eventconnect)
   * [`Event: 'reconnect'`](#gateway-eventreconnect)
   * [`Event: 'close'`](#gateway-eventclose)
   * [`Event: 'offline'`](#gateway-eventoffline)
   * [`Event: 'error'`](#gateway-eventerror)
-* [`Device`](#device)
-  * [`device.sendState()`](#device-sendstate)
-  * [`device.receiveStateChangeRequest()`](#device-receivestatechangerequest)
-  * [`device.receiveMessage()`](#device-receivemessage)
-
-## Gateway
-
-In Structure, a gateway is the thing that is communicating with the Structure platform. Typically code using this SDK is running on a gateway, e.g. Raspberry PI, Intel Edison, etc.
-
-<a name="gateway"></a>
-### Structure.gateway(options)
-
-Constructs a new instance of a Structure gateway.
-
-```javascript
-var Structure = require('structure-sdk-js');
-
-/**
- * Construct a gateway object and provide it the your application
- * security tokens, gateway id, and the ids of attached devices.
- */
-var gateway = Structure.gateway({
-  key: 'my-app-access-key',
-  secret: 'my-app-access-secret',
-  gatewayId: 'my-gateway-id',
-  transport: 'tls'
-});
-
-gateway.connect();
-
-gateway.on('connect', function() {
-
-});
-```
-
-* `key`: The application-specific access key. These are created and managed using the Structure dashboard.
-* `secret`: The application-specific access secret. These are created and managed using the Structure dashboard.
-* `gatewayId`: The id of this gateway. In order to obtain a gateway id, it must first be registered with the Structure platform.
-* `transport`: (optional, defaults to `tls`) The communication transport to use. The valid options are:
-  * `tls`: Encrypted tcp communication over port 8883.
-  * `tcp` Unencrypted tcp communication over port 1883.
-  * `wss` Encrypted WebSocket communication over port 443.
-  * `ws` Unencrypted WebSocket communication over port 80.
-
-<a name="gateway-attachdevice"></a>
-### gateway.attachDevice(deviceId)
-
-Attaches a [device](#device) to this gateway and returns the device object. Typically developers will not construct device objects directly, but will instead use this function. In Structure, devices are typically sensors or other instruments connected to a gateway. For example, the gateway might be a Raspberry PI and a device you attach might be a temperature sensor. `attachDevice` can be called at any time after the gateway is constructed, allowing devices to be dynamically attached and detached at runtime.
-
-```javascript
-  var myDeviceA = gateway.attachDevice('my-device-id-A');
-  var myDeviceB = gateway.attachDevice('my-device-id-B');
-```
-
-* `deviceId`: The id of the device to attach. If the same id is attached multiple times, the same device object will be returned.
-
-<a name="gateway-getdevice"></a>
-### gateway.getDevice(deviceId)
-
-Gets a device that has already been [attached](#gateway-attachdevice) to the gateway. If the device id has not yet been attached, undefined will be returned.
-
-```javascript
-var myDeviceA = gateway.getDevice('my-device-id-A');
-```
-
-* `deviceId`: The id of the device to get.
 
 <a name="gateway-connect"></a>
 ### gateway.connect()
