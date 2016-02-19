@@ -27,6 +27,13 @@ var device = new Device({
 // Connect to Structure.
 device.connect();
 
+// Listen for commands.
+device.on('command', function(command) {
+  console.log('Command received.');
+  console.log(command.name);
+  console.log(command.payload);
+});
+
 // Send temperature once every second.
 setInterval(function() {
   device.sendState({ temperature: readAnalogIn() });
