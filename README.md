@@ -1,7 +1,7 @@
 Structure JavaScript SDK
 ============
 
-The Structure SDKs provide a simple way for custom things to communicate with the Structure platform. The Structure JavaScript SDK uses the Node.js [MQTT client](https://github.com/mqttjs/MQTT.js) for all underlying communication.
+The [Structure](https://www.getstructure.io) SDKs provide a simple way for custom things to communicate with the Structure platform. The Structure JavaScript SDK uses the Node.js [MQTT client](https://github.com/mqttjs/MQTT.js) for all underlying communication.
 
 ## Installation
 The Structure JavaScript SDK is installed using npm.
@@ -26,6 +26,13 @@ var device = new Device({
 
 // Connect to Structure.
 device.connect();
+
+// Listen for commands.
+device.on('command', function(command) {
+  console.log('Command received.');
+  console.log(command.name);
+  console.log(command.payload);
+});
 
 // Send temperature once every second.
 setInterval(function() {
