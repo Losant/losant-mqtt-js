@@ -7,7 +7,7 @@ The [Structure](https://www.getstructure.io) SDKs provide a simple way for custo
 The Structure JavaScript SDK is installed using npm.
 
 ```
-$ npm install structure-sdk-js
+$ npm install @structure/structure-sdk-js
 ```
 
 ## Example
