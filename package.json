@@ -1,10 +1,10 @@
 {
-  "name": "structure-sdk-js",
+  "name": "@structure/structure-sdk-js",
   "version": "1.0.0",
   "description": "The Structure JavaScript SDK",
   "repository": {
     "type": "git",
-    "url": "https://github.com/GetStructure/structure-sdk-js"
+    "url": "git+https://github.com/GetStructure/structure-sdk-js.git"
   },
   "main": "index.js",
   "author": "Structure <hello@getstructure.io>",
@@ -33,5 +33,17 @@
     "proxyquire": "1.7.3",
     "should": "7.1.1",
     "sinon": "1.17.2"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/GetStructure/structure-sdk-js/issues"
+  },
+  "homepage": "https://github.com/GetStructure/structure-sdk-js#readme",
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "keywords": [
+    "IoT",
+    "platform"
+  ]
 }
