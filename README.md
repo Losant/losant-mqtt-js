@@ -44,6 +44,7 @@ setInterval(function() {
 ## API Documentation
 * [`Device`](#device)
   * [`device.connect()`](#device-connect)
+  * [`device.isConnected()`](#device-isconnected)
   * [`device.sendState()`](#device-sendstate)
   * [`Event: 'command'`](#device-eventcommand)
   * [`Event: 'connect'`](#device-eventconnect)
@@ -67,6 +68,15 @@ Connects the device to the Structure platform. The device will automatically ret
 
 ```javascript
 device.connect();
+```
+
+<a name="device-isconnected"></a>
+### device.isConnected()
+
+Returns a boolean indicating whether or not the device is currently connected to the Structure platform.
+
+```javascript
+device.isConnected();
 ```
 
 <a name="device-sendstate"></a>
