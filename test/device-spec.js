@@ -15,6 +15,7 @@ describe('Device', function() {
       device.id.should.equal('my-device-id');
     });
 
+    /* jshint ignore:start */
     it('should throw if ID is not specified', function() {
       var exception = false;
       try {
@@ -23,9 +24,9 @@ describe('Device', function() {
       catch(e) {
         exception = true;
       }
-
       exception.should.be.equal(true);
     });
+    /* jshint ignore:end */
   });
 
   describe('connect', function() {
@@ -52,6 +53,34 @@ describe('Device', function() {
       ).should.equal(true);
 
       stub.restore();
+    });
+  });
+
+  describe('isConnected', function() {
+    it('should return false if never connected', function() {
+      var device = new Device({
+        id: 'my-device-id',
+        key: 'my-access-key',
+        secret: 'my-access-secret'
+      });
+
+      device.isConnected().should.equal(false);
+    });
+
+    it('should return connected status of underlying client', function() {
+      var device = new Device({
+        id: 'my-device-id',
+        key: 'my-access-key',
+        secret: 'my-access-secret'
+      });
+
+      device.connect();
+
+      device._mqttClient.connected = true;
+      device.isConnected().should.equal(true);
+
+      device._mqttClient.connected = false;
+      device.isConnected().should.equal(false);
     });
   });
 
