@@ -54,6 +54,32 @@ describe('Device', function() {
 
       stub.restore();
     });
+
+    it('should call mqtt.connect with correct URL based on transport', function() {
+      var device = new Device({
+        id: 'my-device-id',
+        key: 'my-access-key',
+        secret: 'my-access-secret',
+        transport: 'wss'
+      });
+
+      var stub = sinon.stub(mqttStub, 'connect');
+      stub.returns({ on: function() { }});
+
+      device.connect();
+
+      stub.calledWith(
+        'wss://' + config.mqttEndpoint,
+        {
+          clientId: 'my-device-id',
+          username: 'my-access-key',
+          password: 'my-access-secret',
+          port: 443
+        }
+      ).should.equal(true);
+
+      stub.restore();
+    });
   });
 
   describe('isConnected', function() {

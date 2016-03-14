@@ -61,6 +61,22 @@ A device's state represents a snapshot of the device at some point in time. If t
 
 Commands instruct a device to take a specific action. Commands are defined as a name and an optional payload. For example, if the device is a scrolling marquee, the command might be "update text" and the payload would include the text to update.
 
+```javascript
+var Device = require('structure-sdk-js').Device;
+
+var device = new Device({
+  id: 'my-device-id',
+  key: 'my-app-access-key',
+  secret: 'my-app-access-secret'
+  transport: 'tls'
+});
+```
+
+* `id`: The device's ID. Obtained by first registering a device using the Structure platform.
+* `key`: The Structure access key.
+* `secret`: The Structure access secret.
+* `transport`: The underlying transport mechanism. Supports `tcp`, `tls`, `ws` (WebSocket), and `wss` (Secure WebSocket). Optional. Defaults to `tls`.
+
 <a name="device-connect"></a>
 ### device.connect()
 
