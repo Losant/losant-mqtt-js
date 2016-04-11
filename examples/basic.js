@@ -2,10 +2,10 @@
  * Basic example of connecting to the Structure platform.
  *
  * Copyright (c) 2016 Structure. All rights reserved.
- * http://www.getstructure.io
+ * http://www.losant.com
  */
 
-var Device = require('structure-sdk-js').Device;
+var Device = require('losant-sdk-js').Device;
 
 // Construct a device instance.
 var device = new Device({

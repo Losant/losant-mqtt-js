@@ -1,13 +1,13 @@
 {
-  "name": "structure-sdk-js",
+  "name": "losant-sdk-js",
   "version": "1.1.0",
-  "description": "The Structure JavaScript SDK",
+  "description": "The Losant JavaScript SDK",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GetStructure/structure-sdk-js.git"
+    "url": "https://github.com/Losant/losant-sdk-js"
   },
   "main": "index.js",
-  "author": "Structure <hello@getstructure.io>",
+  "author": "Losant <hello@losant>",
   "license": "MIT",
   "scripts": {
     "pretest": "jshint *.js lib/*.js test/*.js examples/*.js",
@@ -32,9 +32,9 @@
     "sinon": "1.17.2"
   },
   "bugs": {
-    "url": "https://github.com/GetStructure/structure-sdk-js/issues"
+    "url": "https://github.com/Losant/losant-sdk-js/issues"
   },
-  "homepage": "https://github.com/GetStructure/structure-sdk-js#readme",
+  "homepage": "https://github.com/Losant/losant-sdk-js#readme",
   "directories": {
     "example": "examples",
     "test": "test"
