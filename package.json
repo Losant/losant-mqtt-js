@@ -1,13 +1,13 @@
 {
   "name": "losant-sdk-js",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "The Losant JavaScript SDK",
   "repository": {
     "type": "git",
     "url": "https://github.com/Losant/losant-sdk-js"
   },
   "main": "index.js",
-  "author": "Losant <hello@losant>",
+  "author": "Losant <hello@losant.com>",
   "license": "MIT",
   "scripts": {
     "pretest": "jshint *.js lib/*.js test/*.js examples/*.js",
