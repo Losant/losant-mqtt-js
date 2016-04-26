@@ -1,7 +1,7 @@
 /**
- * Basic example of connecting to the Structure platform.
+ * Basic example of connecting to the Losant platform.
  *
- * Copyright (c) 2016 Structure. All rights reserved.
+ * Copyright (c) 2016 Losant. All rights reserved.
  * http://www.losant.com
  */
 
@@ -14,7 +14,7 @@ var device = new Device({
   secret: 'my-access-secret'
 });
 
-// Connect device to Structure.
+// Connect device to Losant.
 device.connect();
 
 
@@ -24,10 +24,10 @@ device.on('command', function(command) {
   console.log(command.payload);
 });
 
-// Once a second, report state to Structure.
+// Once a second, report state to Losant.
 setInterval(function() {
 
-  // Report state to Structure.
+  // Report state to Losant.
   if(device.isConnected()) {
     device.sendState({ key: 'value' });
   }
