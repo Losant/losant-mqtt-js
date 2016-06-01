@@ -17,7 +17,7 @@ Below is a high-level example of using the Losant JavaScript SDK to send the val
 ```javascript
 var Device = require('losant-sdk-js').Device;
 
-// Construct gateway.
+// Construct device.
 var device = new Device({
   id: 'my-device-id',
   key: 'my-app-access-key',
