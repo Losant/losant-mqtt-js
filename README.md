@@ -18,7 +18,7 @@ Below is a high-level example of using the Losant JavaScript SDK to send the val
 var Device = require('losant-sdk-js').Device;
 
 // Construct device.
-var device = new Device({
+var device = Device({
   id: 'my-device-id',
   key: 'my-app-access-key',
   secret: 'my-app-access-secret'
@@ -64,7 +64,7 @@ Commands instruct a device to take a specific action. Commands are defined as a 
 ```javascript
 var Device = require('losant-sdk-js').Device;
 
-var device = new Device({
+var device = Device({
   id: 'my-device-id',
   key: 'my-app-access-key',
   secret: 'my-app-access-secret'
