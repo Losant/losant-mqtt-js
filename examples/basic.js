@@ -8,7 +8,7 @@
 var Device = require('losant-sdk-js').Device;
 
 // Construct a device instance.
-var device = new Device({
+var device = Device({
   id: 'my-device-id',
   key: 'my-access-key',
   secret: 'my-access-secret'
