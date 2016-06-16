@@ -1,5 +1,7 @@
 # Losant JavaScript MQTT Client
 
+[![Build Status](https://travis-ci.org/Losant/losant-mqtt-js.svg?branch=master)](https://travis-ci.org/Losant/losant-mqtt-js)
+
 The [Losant](https://www.losant.com) MQTT client provides a simple way for
 custom things to communicate with the Losant platform over MQTT.  You can
 authenticate as a device, publish device state, and listen for device commands.
