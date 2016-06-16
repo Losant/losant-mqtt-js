@@ -13,7 +13,7 @@
  */
 
 var mraa = require('mraa');
-var Device = require('losant-sdk-js').Device;
+var Device = require('losant-mqtt').Device;
 
 // Reading temperature from analog input.
 var temp = new mraa.Aio(0);

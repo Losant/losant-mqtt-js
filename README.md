@@ -1,21 +1,24 @@
-Losant JavaScript SDK
-============
+# Losant JavaScript MQTT Client
 
-The [Losant](https://www.losant.com) SDKs provide a simple way for custom things to communicate with the Losant platform. The Losant JavaScript SDK uses the Node.js [MQTT client](https://github.com/mqttjs/MQTT.js) for all underlying communication.
+The [Losant](https://www.losant.com) MQTT client provides a simple way for
+custom things to communicate with the Losant platform over MQTT.  You can
+authenticate as a device, publish device state, and listen for device commands.
+
+This client works with Node.js v0.10 and newer. It uses the Node.js [MQTT client](https://github.com/mqttjs/MQTT.js) for all underlying communication.
 
 ## Installation
-The Losant JavaScript SDK is installed using npm.
+The Losant JavaScript MQTT Client is installed using npm.
 
 ```
-$ npm install losant-sdk-js
+$ npm install losant-mqtt
 ```
 
 ## Example
 
-Below is a high-level example of using the Losant JavaScript SDK to send the value of a temperature sensor to the Losant platform.
+Below is a high-level example of using the Losant JavaScript MQTT client to send the value of a temperature sensor to the Losant platform.
 
 ```javascript
-var Device = require('losant-sdk-js').Device;
+var Device = require('losant-mqtt').Device;
 
 // Construct device.
 var device = Device({
@@ -40,18 +43,20 @@ setInterval(function() {
 }, 1000);
 ```
 
+<br/>
 
 ## API Documentation
-* [`Device`](#device)
-  * [`device.connect()`](#device-connect)
-  * [`device.isConnected()`](#device-isconnected)
-  * [`device.sendState()`](#device-sendstate)
-  * [`Event: 'command'`](#device-eventcommand)
-  * [`Event: 'connect'`](#device-eventconnect)
-  * [`Event: 'reconnect'`](#device-eventreconnect)
-  * [`Event: 'close'`](#device-eventclose)
-  * [`Event: 'offline'`](#device-eventoffline)
-  * [`Event: 'error'`](#device-eventerror)
+
+*   [`Device`](#device)
+  *   [`device.connect()`](#device-connect)
+  *   [`device.isConnected()`](#device-isconnected)
+  *   [`device.sendState()`](#device-sendstate)
+  *   [`Event: 'command'`](#device-eventcommand)
+  *   [`Event: 'connect'`](#device-eventconnect)
+  *   [`Event: 'reconnect'`](#device-eventreconnect)
+  *   [`Event: 'close'`](#device-eventclose)
+  *   [`Event: 'offline'`](#device-eventoffline)
+  *   [`Event: 'error'`](#device-eventerror)
 
 <a name="device"></a>
 ## Device
@@ -62,7 +67,7 @@ A device's state represents a snapshot of the device at some point in time. If t
 Commands instruct a device to take a specific action. Commands are defined as a name and an optional payload. For example, if the device is a scrolling marquee, the command might be "update text" and the payload would include the text to update.
 
 ```javascript
-var Device = require('losant-sdk-js').Device;
+var Device = require('losant-mqtt').Device;
 
 var device = Device({
   id: 'my-device-id',
@@ -105,9 +110,9 @@ Sends a device state to the Losant platform. In many scenarios, device states wi
 device.sendState({ voltage: readAnalogIn() });
 ```
 
-* `state`: The state to send as a JavaScript object.
-* `time`: The Date object that the state occurred. Optional. Defaults to `new Date()`.
-* `callback`: Invoked when complete. `err` parameter will have details of any errors that occurred. Optional.
+*   `state`: The state to send as a JavaScript object.
+*   `time`: The Date object that the state occurred. Optional. Defaults to `new Date()`.
+*   `callback`: Invoked when complete. `err` parameter will have details of any errors that occurred. Optional.
 
 <a name="device-eventcommand"></a>
 ### Event: 'command'
@@ -118,9 +123,9 @@ device.on('command', function(command) { });
 
 Emitted whenever a command is received from the Losant platform.
 
-* `command.name`: The name of the command received.
-* `command.time`: The Date of when the command was originally invoked.
-* `command.payload`: The optional payload as a JavaScript object for the command.
+*   `command.name`: The name of the command received.
+*   `command.time`: The Date of when the command was originally invoked.
+*   `command.payload`: The optional payload as a JavaScript object for the command.
 
 <a name="device-eventconnect"></a>
 ### Event: 'connect'

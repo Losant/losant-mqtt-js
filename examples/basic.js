@@ -5,7 +5,7 @@
  * http://www.losant.com
  */
 
-var Device = require('losant-sdk-js').Device;
+var Device = require('losant-mqtt').Device;
 
 // Construct a device instance.
 var device = Device({
