@@ -169,5 +169,10 @@ Emitted by the underlying MQTT client when it cannot connect.
 
 * `err`: The error that occurred.
 
-Copyright (c) 2016 Losant
-https://www.losant.com
+<br/>
+
+*****
+
+Copyright (c) 2016 Losant IoT, Inc
+
+<https://www.losant.com>
