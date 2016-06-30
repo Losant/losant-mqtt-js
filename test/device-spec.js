@@ -1,11 +1,5 @@
-require('should');
-var proxyquire = require('proxyquire');
-var sinon = require('sinon');
-var config = require('../lib/config');
-
-var mqttStub = { connect: function() { return { on: function() { }}; }};
-
-var Device = proxyquire('../lib/device', { 'mqtt' : mqttStub });
+var should = require('should');
+var Device = require('../lib/device');
 
 describe('Device', function() {
 
@@ -29,59 +23,6 @@ describe('Device', function() {
     /* jshint ignore:end */
   });
 
-  describe('connect', function() {
-    it('should call mqtt.connect with correct parameters', function() {
-      var device = new Device({
-        id: 'my-device-id',
-        key: 'my-access-key',
-        secret: 'my-access-secret'
-      });
-
-      var stub = sinon.stub(mqttStub, 'connect');
-      stub.returns({ on: function() { }});
-
-      device.connect();
-
-      stub.calledWith(
-        'mqtts://' + config.mqttEndpoint,
-        {
-          clientId: 'my-device-id',
-          username: 'my-access-key',
-          password: 'my-access-secret',
-          port: 8883
-        }
-      ).should.equal(true);
-
-      stub.restore();
-    });
-
-    it('should call mqtt.connect with correct URL based on transport', function() {
-      var device = new Device({
-        id: 'my-device-id',
-        key: 'my-access-key',
-        secret: 'my-access-secret',
-        transport: 'wss'
-      });
-
-      var stub = sinon.stub(mqttStub, 'connect');
-      stub.returns({ on: function() { }});
-
-      device.connect();
-
-      stub.calledWith(
-        'wss://' + config.mqttEndpoint,
-        {
-          clientId: 'my-device-id',
-          username: 'my-access-key',
-          password: 'my-access-secret',
-          port: 443
-        }
-      ).should.equal(true);
-
-      stub.restore();
-    });
-  });
-
   describe('isConnected', function() {
     it('should return false if never connected', function() {
       var device = new Device({
@@ -90,22 +31,6 @@ describe('Device', function() {
         secret: 'my-access-secret'
       });
 
-      device.isConnected().should.equal(false);
-    });
-
-    it('should return connected status of underlying client', function() {
-      var device = new Device({
-        id: 'my-device-id',
-        key: 'my-access-key',
-        secret: 'my-access-secret'
-      });
-
-      device.connect();
-
-      device._mqttClient.connected = true;
-      device.isConnected().should.equal(true);
-
-      device._mqttClient.connected = false;
       device.isConnected().should.equal(false);
     });
   });
@@ -128,6 +53,33 @@ describe('Device', function() {
     it('should callback with time argument optional', function(done) {
       var device = new Device({ id: 'my-device-id' });
       device.sendState({ test: 'value' }, done);
+    });
+  });
+
+  describe('handleMessage', function() {
+
+    it('should return null if topic does not match device\'s command topic', function() {
+      var device = new Device({ id: 'my-device-id' });
+      var result = device.handleMessage('losant/not-the-id/command', '');
+      should.not.exist(result);
+    });
+
+    it('should return null if bad message', function() {
+      var device = new Device({ id: 'my-device-id' });
+      var result = device.handleMessage('losant/my-device-id/command', 'not-valid-json {}');
+      should.not.exist(result);
+    });
+
+    it('should return null if message is null', function() {
+      var device = new Device({ id: 'my-device-id' });
+      var result = device.handleMessage('losant/my-device-id/command', 'null');
+      should.not.exist(result);
+    });
+
+    it('should return message if valid', function() {
+      var device = new Device({ id: 'my-device-id' });
+      var result = device.handleMessage('losant/my-device-id/command', '{ "foo" : "bar" }');
+      result.foo.should.equal('bar');
     });
   });
 });
