@@ -1,4 +1,4 @@
-var should = require('should');
+require('should');
 var Gateway = require('../lib/gateway');
 
 describe('Device', function() {
@@ -18,7 +18,7 @@ describe('Device', function() {
 
     it('should add peripheral to collection', function() {
       var gateway = new Gateway({ id: 'my-device-id' });
-      var peripheral = gateway.addPeripheral('my-peripheral-id');
+      gateway.addPeripheral('my-peripheral-id');
       gateway.peripherals[0].id.should.equal('my-peripheral-id');
     });
   });
