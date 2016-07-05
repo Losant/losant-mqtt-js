@@ -28,8 +28,7 @@ describe('Device', function() {
       secret: accessSecret
     });
 
-    device.connect(function(err) {
-      should.not.exist(err);
+    device.connect(function() {
       // Not guaranteed to be subscribed yet. Give it a little time.
       setTimeout(function() {
         device.sendState({ temperature: 100 });

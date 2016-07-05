@@ -29,8 +29,7 @@ describe('Gateway', function() {
       secret: accessSecret
     });
 
-    gateway.connect(function(err) {
-      should.not.exist(err);
+    gateway.connect(function() {
       // Not guaranteed to be subscribed yet. Give it a little time.
       setTimeout(function() {
         gateway.sendState({ temperature: 100 });
