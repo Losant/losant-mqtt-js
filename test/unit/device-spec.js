@@ -1,5 +1,5 @@
 var should = require('should');
-var Device = require('../lib/device');
+var Device = require('../../lib/device');
 
 describe('Device', function() {
 

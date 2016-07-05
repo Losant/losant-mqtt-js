@@ -10,8 +10,9 @@
   "author": "Losant <hello@losant.com>",
   "license": "MIT",
   "scripts": {
-    "pretest": "jshint *.js lib/*.js test/*.js examples/*.js",
-    "test": "mocha --recursive --reporter spec test 2>&1",
+    "pretest": "jshint *.js lib/*.js test/unit/*.js examples/*.js",
+    "test": "mocha --recursive --reporter spec test/unit 2>&1",
+    "integration": "mocha --recursive --reporter spec test/integration 2>&1",
     "coverage": "rm -rf coverage; istanbul cover _mocha -- --recursive --reporter spec --bail"
   },
   "dependencies": {

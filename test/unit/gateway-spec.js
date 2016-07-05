@@ -1,5 +1,5 @@
 require('should');
-var Gateway = require('../lib/gateway');
+var Gateway = require('../../lib/gateway');
 
 describe('Device', function() {
   describe('constructor', function() {
