@@ -23,7 +23,7 @@ Below is a high-level example of using the Losant JavaScript MQTT client to send
 var Device = require('losant-mqtt').Device;
 
 // Construct device.
-var device = Device({
+var device = new Device({
   id: 'my-device-id',
   key: 'my-app-access-key',
   secret: 'my-app-access-secret'
@@ -59,6 +59,11 @@ setInterval(function() {
   *   [`Event: 'close'`](#device-eventclose)
   *   [`Event: 'offline'`](#device-eventoffline)
   *   [`Event: 'error'`](#device-eventerror)
+*   [`Gateway`](#gateway)
+  *   [`gateway.addPeripheral()`](#gateway-addperipheral)
+*   [`Peripheral`](#peripheral)
+  *   [`peripheral.sendState()`](#peripheral-sendstate)
+  *   [`Event: 'command'`](#peripheral-eventcommand)
 
 <a name="device"></a>
 ## Device
@@ -71,7 +76,7 @@ Commands instruct a device to take a specific action. Commands are defined as a 
 ```javascript
 var Device = require('losant-mqtt').Device;
 
-var device = Device({
+var device = new Device({
   id: 'my-device-id',
   key: 'my-app-access-key',
   secret: 'my-app-access-secret'
@@ -175,6 +180,112 @@ device.on('error', function(err) { });
 Emitted by the underlying MQTT client when it cannot connect.
 
 * `err`: The error that occurred.
+
+<a name="gateway"></a>
+## Gateway
+The Gateway object extends the Device object, therefore all device functions, properties, and events are available on the gateway.
+
+A gateway works exactly like a device accept that it can also report state and receive commands on behalf of peripherals. Peripherals are things that are not directly connected to Losant. For example a Raspberry Pi could be a gateway that is reporting state for one or more Bluetooth peripherals.
+
+```javascript
+var Gateway = require('losant-mqtt').Gateway;
+
+var gateway = new Gateway({
+  id: 'my-device-id',
+  key: 'my-app-access-key',
+  secret: 'my-app-access-secret'
+});
+
+gateway.connect();
+
+// Add a peripheral to the gateway.
+var peripheral = gateway.addPeripheral('my-peripheral-id');
+
+// Report the peripheral's state.
+// How the gateway communicates to the peripheral (e.g. Bluetooth) is up to
+// the specific environment and implementation.
+peripheral.sendState({ temperature: myReadPeripheralTemp() });
+
+// Listen for commands sent to peripherals.
+peripheral.on('command', function(command) {
+  console.log(command.name);
+  console.log(command.payload);
+  // The gateway can now communicate to the peripheral however needed
+  // to complete this command.
+});
+
+```
+
+<a name="gateway-addperipheral"></a>
+### gateway.addPeripheral(id)
+
+Adds a peripheral to the gateway and returns the peripheral instance. The id is a Losant device id that is created when the device is added to a Losant application. The device must be configured as a peripheral device type when created.
+
+```javascript
+var peripheral = gateway.addPeripheral('my-peripheral-id');
+```
+
+*   `id`: The Losant peripheral device id.
+
+<a name="peripheral"></a>
+## Peripheral
+Peripherals device types do not connect directly to Losant. Gateways report state and handle commands on their behalf. Peripheral instances are not directly constructed. They are created by calling [`addPeripheral`](#gateway-addperipheral) on the gateway.
+
+```javascript
+var Gateway = require('losant-mqtt').Gateway;
+
+var gateway = new Gateway({
+  id: 'my-device-id',
+  key: 'my-app-access-key',
+  secret: 'my-app-access-secret'
+});
+
+gateway.connect();
+
+// Add a peripheral to the gateway.
+var peripheral = gateway.addPeripheral('my-peripheral-id');
+
+// Report the peripheral's state.
+// How the gateway communicates to the peripheral (e.g. Bluetooth) is up to
+// the specific environment and implementation.
+peripheral.sendState({ temperature: myReadPeripheralTemp() });
+
+// Listen for commands sent to peripherals.
+peripheral.on('command', function(command) {
+  console.log(command.name);
+  console.log(command.payload);
+  // The gateway can now communicate to the peripheral however needed
+  // to complete this command.
+});
+
+```
+
+<a name="peripheral-sendstate"></a>
+### peripheral.sendState(state, [time], [callback])
+
+Sends a peripheral device's state to the Losant platform. In many scenarios, device states will change rapidly. For example a GPS device will report GPS coordinates once a second or more. Because of this, sendState is typically the most invoked function. Any state data sent to Losant is stored and made available in data visualization tools and workflow triggers.
+
+```javascript
+// Send the device state to Losant.
+peripheral.sendState({ voltage: myReadPeripheralVoltage() });
+```
+
+*   `state`: The state to send as a JavaScript object.
+*   `time`: The Date object that the state occurred. Optional. Defaults to `new Date()`.
+*   `callback`: Invoked when complete. `err` parameter will have details of any errors that occurred. Optional.
+
+<a name="peripheral-eventcommand"></a>
+### Event: 'command'
+
+```javascript
+peripheral.on('command', function(command) { });
+```
+
+Emitted whenever a command is received from the Losant platform.
+
+*   `command.name`: The name of the command received.
+*   `command.time`: The Date of when the command was originally invoked.
+*   `command.payload`: The optional payload as a JavaScript object for the command.
 
 <br/>
 
