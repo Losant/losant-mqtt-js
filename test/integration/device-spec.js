@@ -28,7 +28,8 @@ describe('Device', function() {
       secret: accessSecret
     });
 
-    device.connect(function() {
+    device.connect(function(err) {
+      should.not.exist(err);
       // Not guaranteed to be subscribed yet. Give it a little time.
       setTimeout(function() {
         device.sendState({ temperature: 100 });
@@ -69,6 +70,74 @@ describe('Device', function() {
       command.payload.temperature.should.equal(50);
       device.disconnect();
       setTimeout(done, 500);
+    });
+  });
+
+  it('should be able to connect after disconnecting', function(done) {
+
+    this.timeout(5000);
+
+    var device = new Device({
+      id: standaloneDeviceId,
+      key: accessKey,
+      secret: accessSecret
+    });
+
+    device.on('command', function() {
+      device.disconnect(function() {
+        setTimeout(done, 500);
+      });
+    });
+
+    device.connect(function() {
+      device.disconnect(function() {
+        device.connect(function() {
+          setTimeout(function() {
+            device.sendState({ temperature: 100 });
+          }, 500);
+        });
+      });
+    });
+  });
+
+  it('should provide error in connect callback', function(done) {
+    var device = new Device({
+      id: standaloneDeviceId,
+      key: accessKey,
+      secret: 'invalid secret'
+    });
+
+    device.on('error', function() { });
+
+    device.connect(function(err) {
+      should.exist(err);
+      device.disconnect(function() {
+        setTimeout(done, 500);
+      });
+    });
+
+  });
+
+  describe('isConnected', function() {
+    it('should return correct result based on connection status', function(done) {
+      this.timeout(5000);
+
+      var device = new Device({
+        id: standaloneDeviceId,
+        key: accessKey,
+        secret: accessSecret
+      });
+
+      device.isConnected().should.equal(false);
+
+      device.connect(function(err) {
+        device.isConnected().should.equal(true);
+
+        device.disconnect(function() {
+          device.isConnected().should.equal(false);
+          setTimeout(done, 500);
+        });
+      });
     });
   });
 });

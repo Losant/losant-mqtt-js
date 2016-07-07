@@ -50,9 +50,12 @@ describe('Device', function() {
       sent.payload.time.getTime().should.equal(date.getTime());
     });
 
-    it('should callback with time argument optional', function(done) {
+    it('should callback with error if not connected', function(done) {
       var device = new Device({ id: 'my-device-id' });
-      device.sendState({ test: 'value' }, done);
+      device.sendState({ test: 'value' }, function(err) {
+        should.exist(err);
+        done();
+      });
     });
   });
 
