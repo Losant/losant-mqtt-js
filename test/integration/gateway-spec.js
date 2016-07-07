@@ -21,7 +21,7 @@ var Device = require('../../lib/device');
 describe('Gateway', function() {
   it('should connect, send state, and receive a command', function(done) {
 
-    this.timeout(5000);
+    this.timeout(8000);
 
     var gateway = new Gateway({
       id: gatewayDeviceId,
@@ -30,22 +30,18 @@ describe('Gateway', function() {
     });
 
     gateway.connect(function() {
-      // Not guaranteed to be subscribed yet. Give it a little time.
-      setTimeout(function() {
-        gateway.sendState({ temperature: 100 });
-      }, 500);
+      gateway.sendState({ temperature: 100 });
     });
 
     gateway.on('command', function(command) {
       command.payload.temperature.should.equal(100);
-      gateway.disconnect();
-      setTimeout(done, 500);
+      gateway.disconnect(done);
     });
   });
 
   it('should reconnect, send state, and receive command', function(done) {
 
-    this.timeout(5000);
+    this.timeout(8000);
 
     var gateway = new Gateway({
       id: gatewayDeviceId,
@@ -54,10 +50,7 @@ describe('Gateway', function() {
     });
 
     gateway.connect(function(err) {
-      setTimeout(function() {
-        // Force-close the connection.
-        gateway.mqtt.client.stream.end();
-      }, 500);
+      gateway.mqtt.client.stream.end();
     });
 
     gateway.on('reconnect', function() {
@@ -68,8 +61,7 @@ describe('Gateway', function() {
 
     gateway.on('command', function(command) {
       command.payload.temperature.should.equal(50);
-      gateway.disconnect();
-      setTimeout(done, 500);
+      gateway.disconnect(done);
     });
   });
 

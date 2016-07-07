@@ -141,7 +141,7 @@ Emitted whenever a command is received from the Losant platform.
 device.on('connect', function() { });
 ```
 
-Emitted by the underlying MQTT client on a successful connection or reconnection.
+Emitted on the very first successful connection. All reconnects will emit the 'reconnect' event.
 
 <a name="device-eventreconnect"></a>
 ### Event: 'reconnect'

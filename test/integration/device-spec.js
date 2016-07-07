@@ -20,7 +20,7 @@ var Device = require('../../lib/device');
 describe('Device', function() {
   it('should connect, send state, and receive a command', function(done) {
 
-    this.timeout(5000);
+    this.timeout(8000);
 
     var device = new Device({
       id: standaloneDeviceId,
@@ -30,22 +30,18 @@ describe('Device', function() {
 
     device.connect(function(err) {
       should.not.exist(err);
-      // Not guaranteed to be subscribed yet. Give it a little time.
-      setTimeout(function() {
-        device.sendState({ temperature: 100 });
-      }, 500);
+      device.sendState({ temperature: 100 });
     });
 
     device.on('command', function(command) {
       command.payload.temperature.should.equal(100);
-      device.disconnect();
-      setTimeout(done, 500);
+      device.disconnect(done);
     });
   });
 
   it('should reconnect, send state, and receive command', function(done) {
 
-    this.timeout(5000);
+    this.timeout(8000);
 
     var device = new Device({
       id: standaloneDeviceId,
@@ -54,10 +50,8 @@ describe('Device', function() {
     });
 
     device.connect(function(err) {
-      setTimeout(function() {
-        // Force-close the connection.
-        device.mqtt.client.stream.end();
-      }, 500);
+      // Force-close the connection.
+      device.mqtt.client.stream.end();
     });
 
     device.on('reconnect', function() {
@@ -68,14 +62,13 @@ describe('Device', function() {
 
     device.on('command', function(command) {
       command.payload.temperature.should.equal(50);
-      device.disconnect();
-      setTimeout(done, 500);
+      device.disconnect(done);
     });
   });
 
   it('should be able to connect after disconnecting', function(done) {
 
-    this.timeout(5000);
+    this.timeout(8000);
 
     var device = new Device({
       id: standaloneDeviceId,
@@ -84,17 +77,13 @@ describe('Device', function() {
     });
 
     device.on('command', function() {
-      device.disconnect(function() {
-        setTimeout(done, 500);
-      });
+      device.disconnect(done);
     });
 
     device.connect(function() {
       device.disconnect(function() {
         device.connect(function() {
-          setTimeout(function() {
-            device.sendState({ temperature: 100 });
-          }, 500);
+          device.sendState({ temperature: 100 });
         });
       });
     });
@@ -111,16 +100,14 @@ describe('Device', function() {
 
     device.connect(function(err) {
       should.exist(err);
-      device.disconnect(function() {
-        setTimeout(done, 500);
-      });
+      device.disconnect(done);
     });
 
   });
 
   describe('isConnected', function() {
     it('should return correct result based on connection status', function(done) {
-      this.timeout(5000);
+      this.timeout(8000);
 
       var device = new Device({
         id: standaloneDeviceId,
@@ -135,7 +122,7 @@ describe('Device', function() {
 
         device.disconnect(function() {
           device.isConnected().should.equal(false);
-          setTimeout(done, 500);
+          done();
         });
       });
     });
