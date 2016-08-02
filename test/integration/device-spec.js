@@ -18,6 +18,28 @@ var should = require('should');
 var Device = require('../../lib/device');
 
 describe('Device', function() {
+
+  it('should connect with and without connect callback', function(done) {
+    this.timeout(8000);
+
+    var device = new Device({
+      id: standaloneDeviceId,
+      key: accessKey,
+      secret: accessSecret
+    });
+
+    device.connect(function(err) {
+      should.not.exist(err);
+      device.disconnect(function() {
+        device.connect();
+        setTimeout(function() {
+          device.isConnected().should.equal(true);
+          device.disconnect(done);
+        }, 1000);
+      });
+    });
+  });
+
   it('should connect, send state, and receive a command', function(done) {
 
     this.timeout(8000);
