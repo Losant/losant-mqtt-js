@@ -287,10 +287,17 @@ Emitted whenever a command is received from the Losant platform.
 *   `command.time`: The Date of when the command was originally invoked.
 *   `command.payload`: The optional payload as a JavaScript object for the command.
 
+## Debugging
+This library uses the [Debug](https://github.com/visionmedia/debug) module for additional debug output. You can enable it by setting the `DEBUG` environment variable to `losant*`.
+
+```text
+DEBUG=losant* node index.js
+```
+
 <br/>
 
 *****
 
-Copyright (c) 2016 Losant IoT, Inc
+Copyright (c) 2017 Losant IoT, Inc
 
 <https://www.losant.com>
