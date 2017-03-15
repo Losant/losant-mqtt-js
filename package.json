@@ -1,6 +1,6 @@
 {
   "name": "losant-mqtt",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "An MQTT client for Losant",
   "repository": {
     "type": "git",
@@ -17,8 +17,8 @@
   },
   "dependencies": {
     "debug": "2.2.0",
-    "mongodb-extended-json": "1.5.3",
-    "mqtt": "1.12.0"
+    "ejson": "2.1.2",
+    "mqtt" : "2.4.0"
   },
   "devDependencies": {
     "async": "1.5.0",

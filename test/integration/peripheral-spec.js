@@ -54,7 +54,7 @@ describe('Peripheral', function() {
     var peripheral = gateway.addPeripheral(peripheralDeviceId);
 
     gateway.connect(function(err) {
-      gateway.mqtt.client.stream.end();
+      gateway.mqtt.client.publish('/losant/not-this-device/state');
     });
 
     gateway.on('reconnect', function() {

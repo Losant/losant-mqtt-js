@@ -50,7 +50,9 @@ describe('Gateway', function() {
     });
 
     gateway.connect(function(err) {
-      gateway.mqtt.client.stream.end();
+      // Force-close the connection by
+      // attempting to public to restricted topic.
+      gateway.mqtt.client.publish('/losant/not-this-device/state');
     });
 
     gateway.on('reconnect', function() {

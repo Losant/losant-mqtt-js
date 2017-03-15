@@ -72,8 +72,9 @@ describe('Device', function() {
     });
 
     device.connect(function(err) {
-      // Force-close the connection.
-      device.mqtt.client.stream.end();
+      // Force-close the connection by
+      // attempting to public to restricted topic.
+      device.mqtt.client.publish('/losant/not-this-device/state');
     });
 
     device.on('reconnect', function() {
