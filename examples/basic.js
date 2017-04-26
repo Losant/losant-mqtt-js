@@ -1,8 +1,8 @@
 /**
  * Basic example of connecting to the Losant platform.
  *
- * Copyright (c) 2016 Losant. All rights reserved.
- * http://www.losant.com
+ * Copyright (c) 2017 Losant IoT, Inc. All rights reserved.
+ * https://www.losant.com
  */
 
 var Device = require('losant-mqtt').Device;
