@@ -8,7 +8,7 @@
 var Device = require('losant-mqtt').Device;
 
 // Construct a device instance.
-var device = Device({
+var device = new Device({
   id: 'my-device-id',
   key: 'my-access-key',
   secret: 'my-access-secret'

@@ -23,7 +23,7 @@ var led = new mraa.Gpio(7);
 led.dir(mraa.DIR_OUT);
 
 // Construct a device instance.
-var device = Device({
+var device = new Device({
   id: 'my-device-id',
   key: 'my-access-key',
   secret: 'my-access-secret'
