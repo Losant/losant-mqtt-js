@@ -90,12 +90,21 @@ var device = new Device({
 * `transport`: The underlying transport mechanism. Supports `tcp`, `tls`, `ws` (WebSocket), and `wss` (Secure WebSocket). Optional. Defaults to `tls`.
 
 <a name="device-connect"></a>
-### device.connect()
+### device.connect([callback])
 
-Connects the device to the Losant platform. The device will automatically retry any lost connections. Hook the [connect](#device-eventconnect) event to know when a connection has been successfully established.
+Connects the device to the Losant platform. The device will automatically retry any lost connections.
+When the connection has been established, the callback is invoked. In the case of a connection error,
+the callback will be invoked with the error.
+Alternately, listen for the [connect](#device-eventconnect) event to know when a connection has been successfully established.
 
 ```javascript
-device.connect();
+device.connect(function (error) {
+  if (error) {
+    // Handle error
+    throw error;
+  }
+  // Successfully connected
+});
 ```
 
 <a name="device-isconnected"></a>
