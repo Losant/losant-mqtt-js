@@ -53,6 +53,7 @@ setInterval(function() {
   *   [`device.connect()`](#device-connect)
   *   [`device.isConnected()`](#device-isconnected)
   *   [`device.sendState()`](#device-sendstate)
+  *   [`device.disconnect()`](#device-disconnect)
   *   [`Event: 'command'`](#device-eventcommand)
   *   [`Event: 'connect'`](#device-eventconnect)
   *   [`Event: 'reconnect'`](#device-eventreconnect)
@@ -129,6 +130,17 @@ device.sendState({ voltage: readAnalogIn() });
 *   `state`: The state to send as a JavaScript object.
 *   `time`: The Date object that the state occurred. Optional. Defaults to `new Date()`.
 *   `callback`: Invoked when complete. `err` parameter will have details of any errors that occurred. Optional.
+
+<a name="device-disconnect"></a>
+### device.disconnect([callback])
+
+Disconnects the device from the Losant platform.
+
+```javascript
+device.disconnect(function() {
+  // Disconnect complete
+});
+```
 
 <a name="device-eventcommand"></a>
 ### Event: 'command'
