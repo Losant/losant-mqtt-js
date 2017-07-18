@@ -18,7 +18,7 @@
   "dependencies": {
     "debug": "2.2.0",
     "ejson": "2.1.2",
-    "mqtt" : "2.4.0"
+    "mqtt": "2.4.0"
   },
   "devDependencies": {
     "async": "1.5.0",
