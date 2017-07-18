@@ -3,7 +3,10 @@
  *
  * Copyright (c) 2017 Losant IoT, Inc. All rights reserved.
  * https://www.losant.com
+ * 
  */
+
+/* eslint no-console: "off"*/
 
 var Device = require('losant-mqtt').Device;
 

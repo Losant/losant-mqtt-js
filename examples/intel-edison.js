@@ -12,6 +12,8 @@
  * https://www.losant.com
  */
 
+ /* eslint no-console: "off"*/
+
 var mraa = require('mraa');
 var Device = require('losant-mqtt').Device;
 

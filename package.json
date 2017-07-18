@@ -10,7 +10,7 @@
   "author": "Losant <hello@losant.com>",
   "license": "MIT",
   "scripts": {
-    "pretest": "jshint *.js lib/*.js test/unit/*.js examples/*.js",
+    "pretest": "eslint *.js lib/*.js test/unit/*.js test/integration/*.js examples/*.js",
     "test": "mocha --recursive --reporter spec test/unit 2>&1",
     "integration": "mocha --recursive --reporter spec test/integration 2>&1",
     "coverage": "rm -rf coverage; istanbul cover _mocha -- --recursive --reporter spec --bail"
@@ -25,6 +25,7 @@
     "cylon": "1.2.0",
     "cylon-gpio": "0.27.0",
     "cylon-intel-iot": "0.8.0",
+    "eslint": "4.2.0",
     "istanbul": "0.4.0",
     "jshint": "2.8.0",
     "mocha": "2.3.3",

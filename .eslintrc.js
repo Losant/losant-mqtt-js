@@ -1,7 +1,8 @@
 module.exports = {
     "env": {
         "browser": false,
-        "node": true
+        "node": true,
+        "mocha": true
     },
     "extends": "eslint:recommended",
     "rules": {
@@ -45,7 +46,12 @@ module.exports = {
         "curly": "error",
         "default-case": "error",
         "dot-location": "error",
-        "dot-notation": "error",
+        "dot-notation": [
+            "error",
+            {
+                "allowKeywords": true
+            }
+        ],
         "eol-last": "error",
         "eqeqeq": "error",
         "for-direction": "error",
@@ -61,7 +67,7 @@ module.exports = {
         ],
         "generator-star-spacing": "error",
         "getter-return": "error",
-        "global-require": "error",
+        "global-require": "off",
         "guard-for-in": "error",
         "handle-callback-err": "error",
         "id-blacklist": "error",
@@ -99,6 +105,7 @@ module.exports = {
         "no-bitwise": "error",
         "no-buffer-constructor": "error",
         "no-caller": "error",
+        "no-console": ["error", { "allow": ["warn", "error"] }],
         "no-catch-shadow": "error",
         "no-confusing-arrow": "error",
         "no-continue": "error",
@@ -124,8 +131,8 @@ module.exports = {
         "no-lone-blocks": "error",
         "no-lonely-if": "off",
         "no-loop-func": "error",
-        "no-magic-numbers": "error",
-        "no-mixed-operators": "error",
+        "no-magic-numbers": "off",
+        "no-mixed-operators": "off",
         "no-mixed-requires": "error",
         "no-multi-assign": "error",
         "no-multi-spaces": "off",
