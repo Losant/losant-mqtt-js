@@ -11,7 +11,6 @@ describe('Device', function() {
       device.id.should.equal('my-device-id');
     });
 
-    /* jshint ignore:start */
     it('should throw if ID is not specified', function() {
       var exception = false;
       try {
@@ -22,7 +21,22 @@ describe('Device', function() {
       }
       exception.should.be.equal(true);
     });
-    /* jshint ignore:end */
+
+    it('should return device object correctly using environment variable', function() {
+      process.env.LOSANT_DEVICE_ID = 'my-device-id';
+      process.env.LOSANT_ACCESS_KEY = 'my-device-key';
+      process.env.LOSANT_ACCESS_SECRET = 'my-device-secret';
+
+      var device = new Device();
+
+      device.id.should.equal('my-device-id');
+      device.options.key.should.equal('my-device-key');
+      device.options.secret.should.equal('my-device-secret');
+
+      delete process.env.LOSANT_DEVICE_ID;
+      delete process.env.LOSANT_ACCESS_KEY;
+      delete process.env.LOSANT_ACCESS_SECRET;
+    });
   });
 
   describe('isConnected', function() {
