@@ -1,6 +1,3 @@
-var should = require('should');
-var Device = require('../../lib/device');
-
 /**
  * These tests perform operations against live Losant devices. In order for
  * these test to correctly run, the following must be setup:
@@ -10,9 +7,9 @@ var Device = require('../../lib/device');
  * Peripheral with { temperature: Number } attribute.
  */
 
-var standaloneDeviceId = process.env['STANDALONE_DEVICE_ID'] || '577bd42ecabe830100a24c10';
-var accessKey = process.env['ACCESS_KEY'] || '59fcf8b7-0186-4385-9a74-c8292ed25470';
-var accessSecret = process.env['ACCESS_SECRET'];
+var standaloneDeviceId = process.env.STANDALONE_DEVICE_ID || '577bd42ecabe830100a24c10';
+var accessKey = process.env.ACCESS_KEY || '59fcf8b7-0186-4385-9a74-c8292ed25470';
+var accessSecret = process.env.ACCESS_SECRET;
 
 var should = require('should');
 var Device = require('../../lib/device');
@@ -71,7 +68,7 @@ describe('Device', function() {
       secret: accessSecret
     });
 
-    device.connect(function(err) {
+    device.connect(function() {
       // Force-close the connection by
       // attempting to public to restricted topic.
       device.mqtt.client.publish('/losant/not-this-device/state');
@@ -140,7 +137,7 @@ describe('Device', function() {
 
       device.isConnected().should.equal(false);
 
-      device.connect(function(err) {
+      device.connect(function() {
         device.isConnected().should.equal(true);
 
         device.disconnect(function() {

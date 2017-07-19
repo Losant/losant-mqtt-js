@@ -1,6 +1,8 @@
 var should = require('should');
 var Device = require('../../lib/device');
 
+/* eslint no-new: "off", no-unused-expressions: "off"*/
+
 describe('Device', function() {
 
   describe('constructor', function() {
@@ -38,7 +40,7 @@ describe('Device', function() {
   describe('sendState', function() {
     it('automatically applies time if not provided', function() {
       var device = new Device({ id: 'my-device-id' });
-      var sent = device.sendState({ test : 'value' });
+      var sent = device.sendState({ test: 'value' });
       sent.payload.time.should.be.ok;
     });
 

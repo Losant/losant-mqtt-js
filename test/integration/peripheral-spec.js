@@ -1,6 +1,3 @@
-var should = require('should');
-var Gateway = require('../../lib/gateway');
-
 /**
  * These tests perform operations against live Losant devices. In order for
  * these test to correctly run, the following must be setup:
@@ -10,13 +7,12 @@ var Gateway = require('../../lib/gateway');
  * Peripheral with { temperature: Number } attribute.
  */
 
-var gatewayDeviceId = process.env['GATEWAY_DEVICE_ID'] || '577bd4699623b80100e3b235';
-var peripheralDeviceId = process.env['PERIPHERAL_DEVICE_ID'] || '577bd49b7b3f830100d9379c';
-var accessKey = process.env['ACCESS_KEY'] || '59fcf8b7-0186-4385-9a74-c8292ed25470';
-var accessSecret = process.env['ACCESS_SECRET'];
+var gatewayDeviceId = process.env.GATEWAY_DEVICE_ID || '577bd4699623b80100e3b235';
+var peripheralDeviceId = process.env.PERIPHERAL_DEVICE_ID || '577bd49b7b3f830100d9379c';
+var accessKey = process.env.ACCESS_KEY || '59fcf8b7-0186-4385-9a74-c8292ed25470';
+var accessSecret = process.env.ACCESS_SECRET;
 
-var should = require('should');
-var Device = require('../../lib/device');
+var Gateway = require('../../lib/gateway');
 
 describe('Peripheral', function() {
   it('should connect, send state, and receive a command', function(done) {
@@ -53,7 +49,7 @@ describe('Peripheral', function() {
 
     var peripheral = gateway.addPeripheral(peripheralDeviceId);
 
-    gateway.connect(function(err) {
+    gateway.connect(function() {
       gateway.mqtt.client.publish('/losant/not-this-device/state');
     });
 
