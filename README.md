@@ -6,7 +6,7 @@ The [Losant](https://www.losant.com) MQTT client provides a simple way for
 custom things to communicate with the Losant platform over MQTT.  You can
 authenticate as a device, publish device state, and listen for device commands.
 
-This client works with Node.js v0.10 and newer. It uses the Node.js [MQTT client](https://github.com/mqttjs/MQTT.js) for all underlying communication.
+This client works with Node.js v4.0 and newer. It uses the Node.js [MQTT client](https://github.com/mqttjs/MQTT.js) for all underlying communication.
 
 ## Installation
 The Losant JavaScript MQTT Client is installed using npm.
