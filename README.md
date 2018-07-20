@@ -89,6 +89,7 @@ var device = new Device({
 * `key`: The Losant access key.
 * `secret`: The Losant access secret.
 * `transport`: The underlying transport mechanism. Supports `tcp`, `tls`, `ws` (WebSocket), and `wss` (Secure WebSocket). Optional. Defaults to `tls`.
+* `mqttEndpoint`: If using a dedicated install of Losant, set this to your broker URL. For example `broker.example.com`. Optional. Defaults to `broker.losant.com`.
 
 <a name="device-connect"></a>
 ### device.connect([callback])
