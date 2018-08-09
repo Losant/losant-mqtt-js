@@ -9,9 +9,10 @@ authenticate as a device, publish device state, and listen for device commands.
 This client works with Node.js v4.0 and newer. It uses the Node.js [MQTT client](https://github.com/mqttjs/MQTT.js) for all underlying communication.
 
 ## Installation
+
 The Losant JavaScript MQTT Client is installed using npm.
 
-```
+```bash
 $ npm install losant-mqtt
 ```
 
@@ -49,25 +50,26 @@ setInterval(function() {
 
 ## API Documentation
 
-*   [`Device`](#device)
-  *   [`device.connect()`](#device-connect)
-  *   [`device.isConnected()`](#device-isconnected)
-  *   [`device.sendState()`](#device-sendstate)
-  *   [`device.disconnect()`](#device-disconnect)
-  *   [`Event: 'command'`](#device-eventcommand)
-  *   [`Event: 'connect'`](#device-eventconnect)
-  *   [`Event: 'reconnect'`](#device-eventreconnect)
-  *   [`Event: 'close'`](#device-eventclose)
-  *   [`Event: 'offline'`](#device-eventoffline)
-  *   [`Event: 'error'`](#device-eventerror)
-*   [`Gateway`](#gateway)
-  *   [`gateway.addPeripheral()`](#gateway-addperipheral)
-*   [`Peripheral`](#peripheral)
-  *   [`peripheral.sendState()`](#peripheral-sendstate)
-  *   [`Event: 'command'`](#peripheral-eventcommand)
+* [`Device`](#device)
+  * [`device.connect()`](#device-connect)
+  * [`device.isConnected()`](#device-isconnected)
+  * [`device.sendState()`](#device-sendstate)
+  * [`device.disconnect()`](#device-disconnect)
+  * [`Event: 'command'`](#device-eventcommand)
+  * [`Event: 'connect'`](#device-eventconnect)
+  * [`Event: 'reconnect'`](#device-eventreconnect)
+  * [`Event: 'reconnected'`](#device-eventreconnected)
+  * [`Event: 'close'`](#device-eventclose)
+  * [`Event: 'offline'`](#device-eventoffline)
+  * [`Event: 'error'`](#device-eventerror)
+* [`Gateway`](#gateway)
+  * [`gateway.addPeripheral()`](#gateway-addperipheral)
+* [`Peripheral`](#peripheral)
+  * [`peripheral.sendState()`](#peripheral-sendstate)
+  * [`Event: 'command'`](#peripheral-eventcommand)
 
-<a name="device"></a>
-## Device
+## Device <a name="device"></a>
+
 A device represents a single thing or widget that you'd like to connect to the Losant platform. A single device can contain many different sensors or other attached peripherals. Devices can either report state or respond to commands.
 
 A device's state represents a snapshot of the device at some point in time. If the device has a temperature sensor, it might report state every few seconds with the temperature. If a device has a button, it might only report state when the button is pressed. Devices can report state as often as needed by your specific application.
@@ -89,10 +91,10 @@ var device = new Device({
 * `key`: The Losant access key.
 * `secret`: The Losant access secret.
 * `transport`: The underlying transport mechanism. Supports `tcp`, `tls`, `ws` (WebSocket), and `wss` (Secure WebSocket). Optional. Defaults to `tls`.
+* `qosPublish`: The QoS level to use for publishing messages. Defaults to 0.
 * `mqttEndpoint`: If using a dedicated install of Losant, set this to your broker URL. For example `broker.example.com`. Optional. Defaults to `broker.losant.com`.
 
-<a name="device-connect"></a>
-### device.connect([callback])
+### device.connect([callback]) <a name="device-connect"></a>
 
 Connects the device to the Losant platform. The device will automatically retry any lost connections.
 When the connection has been established, the callback is invoked. In the case of a connection error,
@@ -109,8 +111,7 @@ device.connect(function (error) {
 });
 ```
 
-<a name="device-isconnected"></a>
-### device.isConnected()
+### device.isConnected() <a name="device-isconnected"></a>
 
 Returns a boolean indicating whether or not the device is currently connected to the Losant platform.
 
@@ -118,8 +119,7 @@ Returns a boolean indicating whether or not the device is currently connected to
 device.isConnected();
 ```
 
-<a name="device-sendstate"></a>
-### device.sendState(state, [time], [callback])
+### device.sendState(state, [time], [callback]) <a name="device-sendstate"></a>
 
 Sends a device state to the Losant platform. In many scenarios, device states will change rapidly. For example a GPS device will report GPS coordinates once a second or more. Because of this, sendState is typically the most invoked function. Any state data sent to Losant is stored and made available in data visualization tools and workflow triggers.
 
@@ -128,12 +128,11 @@ Sends a device state to the Losant platform. In many scenarios, device states wi
 device.sendState({ voltage: readAnalogIn() });
 ```
 
-*   `state`: The state to send as a JavaScript object.
-*   `time`: The Date object that the state occurred. Optional. Defaults to `new Date()`.
-*   `callback`: Invoked when complete. `err` parameter will have details of any errors that occurred. Optional.
+* `state`: The state to send as a JavaScript object.
+* `time`: The Date object that the state occurred. Optional. Defaults to `new Date()`.
+* `callback`: Invoked when complete. `err` parameter will have details of any errors that occurred. Optional.
 
-<a name="device-disconnect"></a>
-### device.disconnect([callback])
+### device.disconnect([callback]) <a name="device-disconnect"></a>
 
 Disconnects the device from the Losant platform.
 
@@ -143,8 +142,7 @@ device.disconnect(function() {
 });
 ```
 
-<a name="device-eventcommand"></a>
-### Event: 'command'
+### Event: 'command' <a name="device-eventcommand"></a>
 
 ```javascript
 device.on('command', function(command) { });
@@ -152,12 +150,11 @@ device.on('command', function(command) { });
 
 Emitted whenever a command is received from the Losant platform.
 
-*   `command.name`: The name of the command received.
-*   `command.time`: The Date of when the command was originally invoked.
-*   `command.payload`: The optional payload as a JavaScript object for the command.
+* `command.name`: The name of the command received.
+* `command.time`: The Date of when the command was originally invoked.
+* `command.payload`: The optional payload as a JavaScript object for the command.
 
-<a name="device-eventconnect"></a>
-### Event: 'connect'
+### Event: 'connect' <a name="device-eventconnect"></a>
 
 ```javascript
 device.on('connect', function() { });
@@ -165,8 +162,7 @@ device.on('connect', function() { });
 
 Emitted on the very first successful connection. All reconnects will emit the 'reconnect' event.
 
-<a name="device-eventreconnect"></a>
-### Event: 'reconnect'
+### Event: 'reconnect' <a name="device-eventreconnect"></a>
 
 ```javascript
 device.on('reconnect', function() { });
@@ -174,8 +170,15 @@ device.on('reconnect', function() { });
 
 Emitted by the underlying MQTT client whenever a reconnect starts.
 
-<a name="device-eventclose"></a>
-### Event: 'close'
+### Event: 'reconnected' <a name="device-eventreconnected"></a>
+
+```javascript
+device.on('reconnected', function() { });
+```
+
+Emitted by the underlying MQTT client whenever a reconnect succeeds.
+
+### Event: 'close' <a name="device-eventclose"></a>
 
 ```javascript
 device.on('close', function() { });
@@ -183,8 +186,7 @@ device.on('close', function() { });
 
 Emitted by the underlying MQTT client after a disconnection.
 
-<a name="device-eventoffline"></a>
-### Event: 'offline'
+### Event: 'offline' <a name="device-eventoffline"></a>
 
 ```javascript
 device.on('offline', function() { });
@@ -192,8 +194,7 @@ device.on('offline', function() { });
 
 Emitted by the underlying MQTT client when it goes offline.
 
-<a name="device-eventerror"></a>
-### Event: 'error'
+### Event: 'error' <a name="device-eventerror"></a>
 
 ```javascript
 device.on('error', function(err) { });
@@ -203,8 +204,8 @@ Emitted by the underlying MQTT client when it cannot connect.
 
 * `err`: The error that occurred.
 
-<a name="gateway"></a>
-## Gateway
+## Gateway <a name="gateway"></a>
+
 The Gateway object extends the Device object, therefore all device functions, properties, and events are available on the gateway.
 
 A gateway works exactly like a device accept that it can also report state and receive commands on behalf of peripherals. Peripherals are things that are not directly connected to Losant. For example a Raspberry Pi could be a gateway that is reporting state for one or more Bluetooth peripherals.
@@ -238,8 +239,7 @@ peripheral.on('command', function(command) {
 
 ```
 
-<a name="gateway-addperipheral"></a>
-### gateway.addPeripheral(id)
+### gateway.addPeripheral(id) <a name="gateway-addperipheral"></a>
 
 Adds a peripheral to the gateway and returns the peripheral instance. The id is a Losant device id that is created when the device is added to a Losant application. The device must be configured as a peripheral device type when created.
 
@@ -247,10 +247,10 @@ Adds a peripheral to the gateway and returns the peripheral instance. The id is 
 var peripheral = gateway.addPeripheral('my-peripheral-id');
 ```
 
-*   `id`: The Losant peripheral device id.
+* `id`: The Losant peripheral device id.
 
-<a name="peripheral"></a>
-## Peripheral
+## Peripheral <a name="peripheral"></a>
+
 Peripherals device types do not connect directly to Losant. Gateways report state and handle commands on their behalf. Peripheral instances are not directly constructed. They are created by calling [`addPeripheral`](#gateway-addperipheral) on the gateway.
 
 ```javascript
@@ -282,8 +282,7 @@ peripheral.on('command', function(command) {
 
 ```
 
-<a name="peripheral-sendstate"></a>
-### peripheral.sendState(state, [time], [callback])
+### peripheral.sendState(state, [time], [callback]) <a name="peripheral-sendstate"></a>
 
 Sends a peripheral device's state to the Losant platform. In many scenarios, device states will change rapidly. For example a GPS device will report GPS coordinates once a second or more. Because of this, sendState is typically the most invoked function. Any state data sent to Losant is stored and made available in data visualization tools and workflow triggers.
 
@@ -292,12 +291,11 @@ Sends a peripheral device's state to the Losant platform. In many scenarios, dev
 peripheral.sendState({ voltage: myReadPeripheralVoltage() });
 ```
 
-*   `state`: The state to send as a JavaScript object.
-*   `time`: The Date object that the state occurred. Optional. Defaults to `new Date()`.
-*   `callback`: Invoked when complete. `err` parameter will have details of any errors that occurred. Optional.
+* `state`: The state to send as a JavaScript object.
+* `time`: The Date object that the state occurred. Optional. Defaults to `new Date()`.
+* `callback`: Invoked when complete. `err` parameter will have details of any errors that occurred. Optional.
 
-<a name="peripheral-eventcommand"></a>
-### Event: 'command'
+### Event: 'command' <a name="peripheral-eventcommand"></a>
 
 ```javascript
 peripheral.on('command', function(command) { });
@@ -305,11 +303,12 @@ peripheral.on('command', function(command) { });
 
 Emitted whenever a command is received from the Losant platform.
 
-*   `command.name`: The name of the command received.
-*   `command.time`: The Date of when the command was originally invoked.
-*   `command.payload`: The optional payload as a JavaScript object for the command.
+* `command.name`: The name of the command received.
+* `command.time`: The Date of when the command was originally invoked.
+* `command.payload`: The optional payload as a JavaScript object for the command.
 
 ## Debugging
+
 This library uses the [Debug](https://github.com/visionmedia/debug) module for additional debug output. You can enable it by setting the `DEBUG` environment variable to `losant*`.
 
 ```text
@@ -320,6 +319,6 @@ DEBUG=losant* node index.js
 
 *****
 
-Copyright (c) 2017 Losant IoT, Inc
+Copyright (c) 2018 Losant IoT, Inc
 
 <https://www.losant.com>
