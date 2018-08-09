@@ -12,33 +12,46 @@ var accessKey = process.env.ACCESS_KEY || '59fcf8b7-0186-4385-9a74-c8292ed25470'
 var accessSecret = process.env.ACCESS_SECRET;
 
 var Gateway = require('../../lib/gateway');
+var gateway = null;
 
 describe('Gateway', function() {
-  it('should connect, send state, and receive a command', function(done) {
 
+  afterEach(function(done) {
+    this.timeout(8000);
+    if(gateway) {
+      gateway.disconnect(done);
+      gateway = null;
+    }
+    else {
+      done();
+    }
+  });
+
+  it('should connect, send state, and receive a command', function(done) {
     this.timeout(8000);
 
-    var gateway = new Gateway({
+    gateway = new Gateway({
       id: gatewayDeviceId,
       key: accessKey,
       secret: accessSecret
     });
 
     gateway.connect(function() {
-      gateway.sendState({ temperature: 100 });
+      setImmediate(function() {
+        gateway.sendState({ temperature: 100 });
+      });
     });
 
     gateway.on('command', function(command) {
       command.payload.temperature.should.equal(100);
-      gateway.disconnect(done);
+      done();
     });
   });
 
   it('should reconnect, send state, and receive command', function(done) {
-
     this.timeout(8000);
 
-    var gateway = new Gateway({
+    gateway = new Gateway({
       id: gatewayDeviceId,
       key: accessKey,
       secret: accessSecret
@@ -47,18 +60,20 @@ describe('Gateway', function() {
     gateway.connect(function() {
       // Force-close the connection by
       // attempting to public to restricted topic.
-      gateway.mqtt.client.publish('/losant/not-this-device/state');
+      setImmediate(function() {
+        gateway.mqtt.client.publish('/losant/not-this-device/state');
+      });
     });
 
-    gateway.on('reconnect', function() {
-      setTimeout(function() {
+    gateway.on('reconnected', function() {
+      setImmediate(function() {
         gateway.sendState({ temperature: 50 });
-      }, 500);
+      });
     });
 
     gateway.on('command', function(command) {
       command.payload.temperature.should.equal(50);
-      gateway.disconnect(done);
+      done();
     });
   });
 
