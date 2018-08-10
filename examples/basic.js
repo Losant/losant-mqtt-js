@@ -1,9 +1,9 @@
 /**
  * Basic example of connecting to the Losant platform.
  *
- * Copyright (c) 2017 Losant IoT, Inc. All rights reserved.
+ * Copyright (c) 2018 Losant IoT, Inc. All rights reserved.
  * https://www.losant.com
- * 
+ *
  */
 
 /* eslint no-console: "off"*/
@@ -21,7 +21,7 @@ var device = new Device({
 device.connect();
 
 
-// Attach event listener for commmands.
+// Attach event listener for commands.
 device.on('command', function(command) {
   console.log(command.name);
   console.log(command.payload);

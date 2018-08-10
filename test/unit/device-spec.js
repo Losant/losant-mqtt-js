@@ -6,7 +6,7 @@ var Device = require('../../lib/device');
 describe('Device', function() {
 
   describe('constructor', function() {
-    it('should return device object intialized correctly', function() {
+    it('should return device object initialized correctly', function() {
       var device = new Device({ id: 'my-device-id' });
       device.id.should.equal('my-device-id');
     });

@@ -13,35 +13,50 @@ var accessSecret = process.env.ACCESS_SECRET;
 
 var should = require('should');
 var Device = require('../../lib/device');
+var device = null;
 
 describe('Device', function() {
+
+  afterEach(function(done) {
+    this.timeout(8000);
+    if(device) {
+      device.disconnect(done);
+      device = null;
+    }
+    else {
+      done();
+    }
+  });
 
   it('should connect with and without connect callback', function(done) {
     this.timeout(8000);
 
-    var device = new Device({
+    device = new Device({
       id: standaloneDeviceId,
       key: accessKey,
       secret: accessSecret
     });
 
     device.connect(function(err) {
-      should.not.exist(err);
-      device.disconnect(function() {
-        device.connect();
-        setTimeout(function() {
-          device.isConnected().should.equal(true);
-          device.disconnect(done);
-        }, 1000);
+      setImmediate(function() {
+        should.not.exist(err);
+        device.disconnect(function() {
+          setImmediate(function() {
+            device.connect();
+            setTimeout(function() {
+              device.isConnected().should.equal(true);
+              done();
+            }, 1000);
+          });
+        });
       });
     });
   });
 
   it('should connect, send state, and receive a command', function(done) {
-
     this.timeout(8000);
 
-    var device = new Device({
+    device = new Device({
       id: standaloneDeviceId,
       key: accessKey,
       secret: accessSecret
@@ -49,20 +64,21 @@ describe('Device', function() {
 
     device.connect(function(err) {
       should.not.exist(err);
-      device.sendState({ temperature: 100 });
+      setImmediate(function() {
+        device.sendState({ temperature: 100 });
+      });
     });
 
     device.on('command', function(command) {
       command.payload.temperature.should.equal(100);
-      device.disconnect(done);
+      done();
     });
   });
 
   it('should reconnect, send state, and receive command', function(done) {
-
     this.timeout(8000);
 
-    var device = new Device({
+    device = new Device({
       id: standaloneDeviceId,
       key: accessKey,
       secret: accessSecret
@@ -71,46 +87,54 @@ describe('Device', function() {
     device.connect(function() {
       // Force-close the connection by
       // attempting to public to restricted topic.
-      device.mqtt.client.publish('/losant/not-this-device/state');
+      setImmediate(function() {
+        device.mqtt.client.publish('/losant/not-this-device/state');
+      });
     });
 
-    device.on('reconnect', function() {
-      setTimeout(function() {
+    device.on('reconnected', function() {
+      setImmediate(function() {
         device.sendState({ temperature: 50 });
-      }, 500);
+      });
     });
 
     device.on('command', function(command) {
       command.payload.temperature.should.equal(50);
-      device.disconnect(done);
+      done();
     });
   });
 
   it('should be able to connect after disconnecting', function(done) {
-
     this.timeout(8000);
 
-    var device = new Device({
+    device = new Device({
       id: standaloneDeviceId,
       key: accessKey,
       secret: accessSecret
     });
 
-    device.on('command', function() {
-      device.disconnect(done);
+    device.on('command', function(command) {
+      command.payload.temperature.should.equal(100);
+      done();
     });
 
     device.connect(function() {
-      device.disconnect(function() {
-        device.connect(function() {
-          device.sendState({ temperature: 100 });
+      setImmediate(function() {
+        device.disconnect(function() {
+          setImmediate(function() {
+            device.connect(function() {
+              setImmediate(function() {
+                device.sendState({ temperature: 100 });
+              });
+            });
+          });
         });
       });
     });
   });
 
   it('should provide error in connect callback', function(done) {
-    var device = new Device({
+    device = new Device({
       id: standaloneDeviceId,
       key: accessKey,
       secret: 'invalid secret'
@@ -120,16 +144,15 @@ describe('Device', function() {
 
     device.connect(function(err) {
       should.exist(err);
-      device.disconnect(done);
+      done();
     });
-
   });
 
   describe('isConnected', function() {
     it('should return correct result based on connection status', function(done) {
       this.timeout(8000);
 
-      var device = new Device({
+      device = new Device({
         id: standaloneDeviceId,
         key: accessKey,
         secret: accessSecret
@@ -140,9 +163,12 @@ describe('Device', function() {
       device.connect(function() {
         device.isConnected().should.equal(true);
 
-        device.disconnect(function() {
-          device.isConnected().should.equal(false);
-          done();
+        setImmediate(function() {
+          device.disconnect(function() {
+            device.isConnected().should.equal(false);
+            device = null;
+            done();
+          });
         });
       });
     });
