@@ -91,7 +91,7 @@ var device = new Device({
 * `key`: The Losant access key.
 * `secret`: The Losant access secret.
 * `transport`: The underlying transport mechanism. Supports `tcp`, `tls`, `ws` (WebSocket), and `wss` (Secure WebSocket). Optional. Defaults to `tls`.
-* `qosPublish`: The QoS level to use for publishing messages. Defaults to 0.
+* `qosPublish`: The QoS level to use for publishing messages. Defaults to 0. Valid levels are 0 and 1 - QoS level 2 is not supported.
 * `mqttEndpoint`: If using a dedicated install of Losant, set this to your broker URL. For example `broker.example.com`. Optional. Defaults to `broker.losant.com`.
 
 ### device.connect([callback]) <a name="device-connect"></a>
