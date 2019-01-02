@@ -13,7 +13,7 @@ This client works with Node.js v4.0 and newer. It uses the Node.js [MQTT client]
 The Losant JavaScript MQTT Client is installed using npm.
 
 ```bash
-$ npm install losant-mqtt
+npm install losant-mqtt
 ```
 
 ## Example
@@ -319,6 +319,6 @@ DEBUG=losant* node index.js
 
 *****
 
-Copyright (c) 2018 Losant IoT, Inc
+Copyright (c) 2019 Losant IoT, Inc
 
 <https://www.losant.com>

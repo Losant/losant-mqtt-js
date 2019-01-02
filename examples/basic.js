@@ -1,7 +1,7 @@
 /**
  * Basic example of connecting to the Losant platform.
  *
- * Copyright (c) 2018 Losant IoT, Inc. All rights reserved.
+ * Copyright (c) 2019 Losant IoT, Inc. All rights reserved.
  * https://www.losant.com
  *
  */

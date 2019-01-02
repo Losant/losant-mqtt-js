@@ -8,7 +8,7 @@
  * LED connected to GPIO pin 7.
  * TMP36 temperature sensor connected to analog input A0.
  *
- * Copyright (c) 2018 Losant IoT, Inc. All rights reserved.
+ * Copyright (c) 2019 Losant IoT, Inc. All rights reserved.
  * https://www.losant.com
  */
 
