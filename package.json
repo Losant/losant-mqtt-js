@@ -16,7 +16,7 @@
     "coverage": "rm -rf coverage; istanbul cover _mocha -- --recursive --reporter spec --bail"
   },
   "engines": {
-    "node": ">= 4.0"
+    "node": ">= 8.0"
   },
   "dependencies": {
     "debug": "^3.1.0",
