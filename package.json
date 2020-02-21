@@ -1,6 +1,6 @@
 {
   "name": "losant-mqtt",
-  "version": "3.1.0",
+  "version": "4.0.0",
   "description": "An MQTT client for Losant",
   "repository": {
     "type": "git",
@@ -12,22 +12,20 @@
   "scripts": {
     "lint": "eslint *.js lib test examples",
     "test": "mocha --recursive --reporter spec test/unit 2>&1",
-    "integration": "mocha --recursive --reporter spec test/integration 2>&1",
-    "coverage": "rm -rf coverage; istanbul cover _mocha -- --recursive --reporter spec --bail"
+    "integration": "mocha --recursive --reporter spec test/integration 2>&1"
   },
   "engines": {
     "node": ">= 8.0"
   },
   "dependencies": {
-    "debug": "^3.1.0",
-    "ejson": "^2.1.2",
-    "mqtt": "^2.18.3"
+    "debug": "^4.1.1",
+    "mqtt": "^2.18.8"
   },
   "devDependencies": {
-    "eslint": "^4.6.1",
-    "istanbul": "^0.4.5",
-    "mocha": "^6.1.4",
-    "should": "^13.0.1"
+    "eslint": "^6.8.0",
+    "eslint-plugin-es5": "^1.5.0",
+    "mocha": "^7.0.1",
+    "should": "^13.2.3"
   },
   "bugs": {
     "url": "https://github.com/Losant/losant-mqtt-js/issues"

@@ -1,10 +1,16 @@
 module.exports = {
+    "plugins": [
+      "es5"
+    ],
     "env": {
         "browser": false,
         "node": true,
         "mocha": true
     },
-    "extends": "eslint:recommended",
+    "extends": [
+        "eslint:recommended",
+        "plugin:es5/no-es2015"
+    ],
     "rules": {
         "accessor-pairs": "error",
         "array-bracket-newline": "error",
@@ -60,10 +66,6 @@ module.exports = {
         "func-names": [
             "error",
             "never"
-        ],
-        "func-style": [
-            "error",
-            "declaration"
         ],
         "generator-star-spacing": "error",
         "getter-return": "error",
@@ -175,7 +177,6 @@ module.exports = {
         "no-throw-literal": "error",
         "no-trailing-spaces": "error",
         "no-undef-init": "error",
-        "no-undefined": "error",
         "no-underscore-dangle": "error",
         "no-unmodified-loop-condition": "error",
         "no-unneeded-ternary": "error",
