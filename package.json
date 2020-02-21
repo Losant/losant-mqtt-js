@@ -18,7 +18,7 @@
     "node": ">= 8.0"
   },
   "dependencies": {
-    "debug": "^3.2.6",
+    "debug": ">=3 <4",
     "mqtt": "^2.18.8"
   },
   "devDependencies": {
