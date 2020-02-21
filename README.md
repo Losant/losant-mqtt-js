@@ -319,6 +319,6 @@ DEBUG=losant* node index.js
 
 *****
 
-Copyright (c) 2019 Losant IoT, Inc
+Copyright (c) 2020 Losant IoT, Inc
 
 <https://www.losant.com>
