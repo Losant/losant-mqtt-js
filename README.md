@@ -1,6 +1,6 @@
 # Losant JavaScript MQTT Client
 
-[![Build Status](https://travis-ci.org/Losant/losant-mqtt-js.svg?branch=master)](https://travis-ci.org/Losant/losant-mqtt-js) [![npm version](https://badge.fury.io/js/losant-mqtt.svg)](https://badge.fury.io/js/losant-mqtt)
+[![Build Status](https://travis-ci.com/Losant/losant-mqtt-js.svg?branch=master)](https://travis-ci.com/Losant/losant-mqtt-js) [![npm version](https://badge.fury.io/js/losant-mqtt.svg)](https://badge.fury.io/js/losant-mqtt)
 
 The [Losant](https://www.losant.com) MQTT client provides a simple way for
 custom things to communicate with the Losant platform over MQTT.  You can
@@ -319,6 +319,6 @@ DEBUG=losant* node index.js
 
 *****
 
-Copyright (c) 2020 Losant IoT, Inc
+Copyright (c) 2021 Losant IoT, Inc
 
 <https://www.losant.com>
