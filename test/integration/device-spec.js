@@ -28,7 +28,7 @@ describe('Device', function() {
     }
   });
 
-  it('should connect with and without connect callback', function(done) {
+  it.skip('should connect with and without connect callback', function(done) {
     this.timeout(8000);
 
     device = new Device({
