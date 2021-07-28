@@ -1,6 +1,6 @@
 {
   "name": "losant-mqtt",
-  "version": "4.0.1",
+  "version": "5.0.0",
   "description": "An MQTT client for Losant",
   "repository": {
     "type": "git",
@@ -15,7 +15,7 @@
     "integration": "mocha --recursive --reporter spec test/integration 2>&1"
   },
   "engines": {
-    "node": ">= 8.0"
+    "node": ">= 11.0"
   },
   "dependencies": {
     "debug": ">=3 <4",
