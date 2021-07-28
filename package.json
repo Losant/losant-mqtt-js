@@ -10,7 +10,7 @@
   "author": "Losant <hello@losant.com>",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint *.js lib test examples",
+    "lint": "eslint --ext .js lib/** test/** examples/**",
     "test": "mocha --recursive --reporter spec test/unit 2>&1",
     "integration": "mocha --recursive --reporter spec test/integration 2>&1"
   },
@@ -22,8 +22,8 @@
     "mqtt": "^4.2.8"
   },
   "devDependencies": {
-    "eslint": "^6.8.0",
-    "eslint-plugin-es5": "^1.5.0",
+    "eslint": "^7.17.0",
+    "eslint-plugin-node": "^11.1.0",
     "mocha": "^7.0.1",
     "should": "^13.2.3"
   },
