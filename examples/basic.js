@@ -6,9 +6,9 @@
  *
  */
 
-/* eslint no-console: "off"*/
+/* eslint no-console: "off" */
 
-const Device = require('losant-mqtt').Device;
+const Device = require('losant-mqtt').Device; // eslint-disable-line import/no-unresolved
 
 // Construct a device instance.
 const device = new Device({

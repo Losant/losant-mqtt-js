@@ -57,5 +57,8 @@
   },
   "lint-staged": {
     "*.js": "esw"
+  },
+  "eslintConfig": {
+    "extends": "@losant/eslint-config-losant/env/node"
   }
 }
