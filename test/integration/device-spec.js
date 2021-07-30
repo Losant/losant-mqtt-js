@@ -27,7 +27,7 @@ describe('Device', function() {
     }
   });
 
-  it.skip('should connect with and without connect callback', function(done) {
+  it('should connect with and without connect callback', function(done) {
     this.timeout(8000);
 
     device = new Device({
@@ -41,11 +41,10 @@ describe('Device', function() {
         should.not.exist(err);
         device.disconnect(function() {
           setImmediate(function() {
-            device.connect();
-            setTimeout(function() {
+            device.connect(function() {
               device.isConnected().should.equal(true);
               done();
-            }, 1000);
+            });
           });
         });
       });
