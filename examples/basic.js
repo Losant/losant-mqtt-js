@@ -6,12 +6,12 @@
  *
  */
 
-/* eslint no-console: "off"*/
+/* eslint no-console: "off" */
 
-var Device = require('losant-mqtt').Device;
+const Device = require('losant-mqtt').Device; // eslint-disable-line import/no-unresolved
 
 // Construct a device instance.
-var device = new Device({
+const device = new Device({
   id: 'my-device-id',
   key: 'my-access-key',
   secret: 'my-access-secret'
@@ -31,7 +31,7 @@ device.on('command', function(command) {
 setInterval(function() {
 
   // Report state to Losant.
-  if(device.isConnected()) {
+  if (device.isConnected()) {
     device.sendState({ key: 'value' });
   }
 

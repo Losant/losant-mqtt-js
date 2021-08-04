@@ -7,23 +7,22 @@
  * Peripheral with { temperature: Number } attribute.
  */
 
-var standaloneDeviceId = process.env.STANDALONE_DEVICE_ID || '577bd42ecabe830100a24c10';
-var accessKey = process.env.ACCESS_KEY || '59fcf8b7-0186-4385-9a74-c8292ed25470';
-var accessSecret = process.env.ACCESS_SECRET;
+const standaloneDeviceId = process.env.STANDALONE_DEVICE_ID || '577bd42ecabe830100a24c10';
+const accessKey = process.env.ACCESS_KEY || '59fcf8b7-0186-4385-9a74-c8292ed25470';
+const accessSecret = process.env.ACCESS_SECRET;
 
-var should = require('should');
-var Device = require('../../lib/device');
-var device = null;
+const should = require('should');
+const Device = require('../../lib/device');
+let device = null;
 
 describe('Device', function() {
 
   afterEach(function(done) {
     this.timeout(8000);
-    if(device) {
+    if (device) {
       device.disconnect(done);
       device = null;
-    }
-    else {
+    } else {
       done();
     }
   });
@@ -42,11 +41,10 @@ describe('Device', function() {
         should.not.exist(err);
         device.disconnect(function() {
           setImmediate(function() {
-            device.connect();
-            setTimeout(function() {
+            device.connect(function() {
               device.isConnected().should.equal(true);
               done();
-            }, 1000);
+            });
           });
         });
       });

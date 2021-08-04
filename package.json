@@ -1,6 +1,6 @@
 {
   "name": "losant-mqtt",
-  "version": "4.0.1",
+  "version": "5.0.0",
   "description": "An MQTT client for Losant",
   "repository": {
     "type": "git",
@@ -10,21 +10,29 @@
   "author": "Losant <hello@losant.com>",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint *.js lib test examples",
-    "test": "mocha --recursive --reporter spec test/unit 2>&1",
-    "integration": "mocha --recursive --reporter spec test/integration 2>&1"
+    "lint": "esw . --ext .js",
+    "lint:fix": "yarn lint --fix",
+    "lint:watch": "yarn lint --watch",
+    "lint:changed": "lint-staged",
+    "test": "mocha test/unit 2>&1",
+    "test:watch": "mocha --watch test/unit 2>&1",
+    "reinstall": "rm -rf node_modules && npm install",
+    "integration": "mocha test/integration 2>&1",
+    "prepare": "husky install",
+    "lint-staged": "lint-staged"
   },
   "engines": {
-    "node": ">= 8.0"
+    "node": ">= 12.0"
   },
   "dependencies": {
-    "debug": ">=3 <4",
-    "mqtt": "^2.18.8"
+    "debug": "^4.3.2",
+    "mqtt": "^4.2.8"
   },
   "devDependencies": {
-    "eslint": "^6.8.0",
-    "eslint-plugin-es5": "^1.5.0",
-    "mocha": "^7.0.1",
+    "@losant/eslint-config-losant": "^1.4.0",
+    "husky": "^6.0.0",
+    "lint-staged": "^10.4.2",
+    "mocha": "^9.0.3",
     "should": "^13.2.3"
   },
   "bugs": {
@@ -33,11 +41,24 @@
   "homepage": "https://github.com/Losant/losant-mqtt-js#readme",
   "directories": {
     "example": "examples",
-    "test": "test"
+    "test": "test",
+    "lib": "lib"
   },
   "keywords": [
     "IoT",
     "platform",
     "MQTT"
-  ]
+  ],
+  "mocha": {
+    "reporter": "spec",
+    "recursive": true,
+    "require": "should",
+    "check-leaks": true
+  },
+  "lint-staged": {
+    "*.js": "esw"
+  },
+  "eslintConfig": {
+    "extends": "@losant/eslint-config-losant/env/node"
+  }
 }
